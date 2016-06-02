@@ -9,18 +9,17 @@ function jyDate(jyDate) {
     this._week = _date.getDay();//星期
     var self = this;
     var odiv = document.getElementById('jyDate');
-    var prev, next;
+    odiv.appendChild(self._createTitle());
+    var prev = document.querySelector('#jydaDe-head');
+    var next = document.querySelector('.jydaDe-next');
+
     function init() {
         odiv.appendChild(self._create());
-        prev = document.querySelector('#jydaDe-head');
-        next = document.querySelector('.jydaDe-next');
     }
 
-
-
-    //next.addEventListener('click',function(){
-    //    odiv.appendChild(self._create(this._year,this._month-2));
-    //},false)
+    next.addEventListener('click',function(){
+        odiv.appendChild(self._create(self._year,(self._month)));
+    },false)
 
 
     return init();
