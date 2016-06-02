@@ -1,0 +1,28 @@
+.jydaDe {
+    width: 100%;
+    clear: left;
+    display:table;
+    border-collapse:separate;
+}
+.week-row,.day-row {
+    display:table-row;
+}
+.week-row>div,.day-row>div {
+     display:table-cell;
+ }
+.jydaDe-head{
+width: 100%;
+}
+.jydaDe-head>div {
+    width: 25%;
+    float: left;
+}
+.jydaDe-head>div:last-child {
+    text-align: right;
+    float: right;
+}
+.jydaDe-head #jydaDe-head{
+    text-align: center;
+    width: 50%;
+    margin: 0 auto;
+}
