@@ -1,0 +1,21 @@
+{
+  "name": "jyDate",
+  "version": "0.0.1",
+  "description": "a common jyDate lib",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cleartime/jyDate.git"
+  },
+  "keywords": [
+    "common",
+    "jyDate"
+  ],
+  "author": "gxx",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^1.12.11"
+  }
+}

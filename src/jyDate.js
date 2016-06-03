@@ -1,6 +1,7 @@
 /**
  * Created by gxx on 16/6/2.
  */
+
 function jyDate(jyDate) {
     var _date = new Date();
     this._year = _date.getFullYear();//年
@@ -17,12 +18,21 @@ function jyDate(jyDate) {
         odiv.appendChild(self._create());
     }
 
-    next.addEventListener('click',function(){
-        odiv.appendChild(self._create(self._year,(self._month)));
-    },false)
+    next.addEventListener('click', function () {
+        odiv.appendChild(self._create(self._year, (self._month)));
+    }, false);
 
 
     return init();
+}
+
+
+/**
+ * 简单的函数封装，执行callback
+ * @param callback 执行的函数
+ */
+function next(callback) {
+    callback && callback();
 }
 
 /**
@@ -41,7 +51,7 @@ jyDate.prototype.is_leap = function (year) {
  * @returns {Array}
  */
 jyDate.prototype.m_days = function (year) {
-    return new Array(31, 28 + this.is_leap(year || this._year), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+    return [31, 28 + this.is_leap(year || this._year), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 };
 
 /**
@@ -70,6 +80,12 @@ jyDate.prototype.tr_str = function (year, month) {
 };
 
 
+/**
+ * 创建标题文档
+ * @param year 年份
+ * @param month 月份
+ * @private
+ */
 jyDate.prototype._createTitle = function (year, month) {
     var fragment = document.createDocumentFragment();
     var otitle = document.createElement('div');
@@ -77,7 +93,7 @@ jyDate.prototype._createTitle = function (year, month) {
     otitle.innerHTML = '<div class="jydaDe-prev"> < </div><div id="jydaDe-head">' + (year || this._year ) + '年' + (month || this._month + 1) + '月' + '</div><div class="jydaDe-next"> > </div>';
     fragment.appendChild(otitle);
     return fragment;
-}
+};
 
 
 /**
