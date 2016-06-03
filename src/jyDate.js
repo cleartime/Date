@@ -6,9 +6,11 @@ var MONTH_NOW = null;
 var DAY_NOW = null;
 var ISCLICK = true;
 var ISCLICKDAY = true;
-var TYPE = 'checkbox';
+var CLICKTYPE = 'click';
+var INPUTTYPE = 'checkbox';
+var DATAARR = null;
 
-function jyDate(jyDate) {
+function jyDate() {
     var _date = new Date();
     this._year = _date.getFullYear();//年
     this._month = _date.getMonth();//月
@@ -36,13 +38,12 @@ function jyDate(jyDate) {
         }
         var prev = document.querySelector('.jydaDe-prev');
         var next = document.querySelector('.jydaDe-next');
-        var type = 'click';
-        next.addEventListener(type, function () {
+        next.addEventListener(CLICKTYPE, function () {
             odiv.innerHTML = '';
             odiv.appendChild(self._create(self.getYear(1), self.getMonth(1)));
             change()
         }, false);
-        prev.addEventListener(type, function () {
+        prev.addEventListener(CLICKTYPE, function () {
             odiv.innerHTML = '';
             odiv.appendChild(self._create(self.getYear(0), self.getMonth(0)));
             change()
@@ -50,29 +51,21 @@ function jyDate(jyDate) {
     }
 
 
+    function getDay() {
 
-    function clickDay() {
-        if (!ISCLICKDAY) {
-            return false
-        }
-        var prev = document.querySelector('.jydaDe-prev');
-        var next = document.querySelector('.jydaDe-next');
-        var type = 'click';
-        next.addEventListener(type, function () {
-            odiv.innerHTML = '';
-            odiv.appendChild(self._create(self.getYear(1), self.getMonth(1)));
-            change()
-        }, false);
-        prev.addEventListener(type, function () {
-            odiv.innerHTML = '';
-            odiv.appendChild(self._create(self.getYear(0), self.getMonth(0)));
-            change()
+        var olabel = document.querySelector('label');
+        olabel.addEventListener(CLICKTYPE, function () {
+
         }, false)
+
     }
 
     return {
         init: function (config) {
             init(config);
+        },
+        getDay: function () {
+            return getDay();
         }
     };
 }
@@ -94,17 +87,41 @@ function next(callback) {
 
 jyDate.prototype._config = function (config) {
     if (config.data) {
-        var arr = ['-', ' ', ','];
-        for (var i = 0, len = arr.length; i < len; i++) {
-            YEAR_NOW = config.data.split(arr[i])[0];
-            MONTH_NOW = config.data.split(arr[i])[1];
-            DAY_NOW = config.data.split(arr[i])[2];
-            if (config.data.split(arr[i]).length === 3) {
-                break
-            }
-        }
+        this.setData(config.data);
+    }
+    if (config.dateArr) {
+        this.setDay(config.dateArr);
     }
     ISCLICK = config.isClick === false ? false : true;
+    ISCLICKDAY = config.isClickDay === false ? false : true;
+    CLICKTYPE = config.clickType || 'click';
+    INPUTTYPE = config.inputType || 'checkbox';
+};
+
+/**
+ * 设置年月日
+ * @param dateArr 年月日数组
+ */
+
+jyDate.prototype.setDay = function (dateArr) {
+    DATAARR = dateArr;
+    return true
+};
+
+/**
+ * 获取传过来的时间进行处理
+ * @param data
+ */
+jyDate.prototype.setData = function (data) {
+    var arr = ['-', ' ', ','];
+    for (var i = 0, len = arr.length; i < len; i++) {
+        YEAR_NOW = data.split(arr[i])[0];
+        MONTH_NOW = data.split(arr[i])[1];
+        DAY_NOW = data.split(arr[i])[2];
+        if (data.split(arr[i]).length === 3) {
+            break
+        }
+    }
 };
 
 /**
@@ -193,13 +210,6 @@ jyDate.prototype.tr_str = function () {
 
 
 /**
- * 删除之前的DOM
- */
-jyDate.prototype._deleteDom = function () {
-
-};
-
-/**
  * 创建标题文档
  * @param year 年份
  * @param month 月份
@@ -238,7 +248,12 @@ jyDate.prototype._create = function () {
             if (num <= 0) {
                 ohtml += '<div>&nbsp;</div>';
             } else {
-                ohtml += '<div><input type='+TYPE+' checked value='+num+'>' + '<label>'+num+'</label>'  + '</div>';
+                if (!ISCLICKDAY) {
+                    ohtml += '<div><label>' + num + '</label>' + '</div>';
+                }
+                else {
+                    ohtml += '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input">' + '<label>' + num + '</label>' + '</div>';
+                }
             }
             num++;
         }
