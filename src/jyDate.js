@@ -4,6 +4,9 @@
 var YEAR_NOW = null;
 var MONTH_NOW = null;
 var DAY_NOW = null;
+var ISCLICK = true;
+var ISCLICKDAY = true;
+var TYPE = 'checkbox';
 
 function jyDate(jyDate) {
     var _date = new Date();
@@ -14,14 +17,13 @@ function jyDate(jyDate) {
     var self = this;
     var odiv = document.getElementById('jyDate');
 
-
-    function init(year, month) {
+    function init(config) {
         YEAR_NOW = self._year;
         MONTH_NOW = self._month + 1;
-        if (year && month) {
-            YEAR_NOW = year;
-            MONTH_NOW = month;
-            odiv.appendChild(self._create(year, month));
+        if (config) {
+            self._config(config);
+            odiv.appendChild(self._create());
+            change();
             return
         }
         odiv.appendChild(self._create());
@@ -29,25 +31,49 @@ function jyDate(jyDate) {
     }
 
     function change() {
+        if (!ISCLICK) {
+            return false
+        }
         var prev = document.querySelector('.jydaDe-prev');
         var next = document.querySelector('.jydaDe-next');
-        next.addEventListener('click', function () {
+        var type = 'click';
+        next.addEventListener(type, function () {
+            odiv.innerHTML = '';
             odiv.appendChild(self._create(self.getYear(1), self.getMonth(1)));
+            change()
         }, false);
-        prev.addEventListener('click', function () {
+        prev.addEventListener(type, function () {
+            odiv.innerHTML = '';
             odiv.appendChild(self._create(self.getYear(0), self.getMonth(0)));
+            change()
         }, false)
     }
 
-    function noClick() {
 
+
+    function clickDay() {
+        if (!ISCLICKDAY) {
+            return false
+        }
+        var prev = document.querySelector('.jydaDe-prev');
+        var next = document.querySelector('.jydaDe-next');
+        var type = 'click';
+        next.addEventListener(type, function () {
+            odiv.innerHTML = '';
+            odiv.appendChild(self._create(self.getYear(1), self.getMonth(1)));
+            change()
+        }, false);
+        prev.addEventListener(type, function () {
+            odiv.innerHTML = '';
+            odiv.appendChild(self._create(self.getYear(0), self.getMonth(0)));
+            change()
+        }, false)
     }
 
-
     return {
-        init: function (year, month) {
-            init(year, month);
-        },
+        init: function (config) {
+            init(config);
+        }
     };
 }
 
@@ -61,8 +87,29 @@ function next(callback) {
 
 
 /**
+ * 创建规则
+ * @param config 规则
+ * @returns
+ */
+
+jyDate.prototype._config = function (config) {
+    if (config.data) {
+        var arr = ['-', ' ', ','];
+        for (var i = 0, len = arr.length; i < len; i++) {
+            YEAR_NOW = config.data.split(arr[i])[0];
+            MONTH_NOW = config.data.split(arr[i])[1];
+            DAY_NOW = config.data.split(arr[i])[2];
+            if (config.data.split(arr[i]).length === 3) {
+                break
+            }
+        }
+    }
+    ISCLICK = config.isClick === false ? false : true;
+};
+
+/**
  * 获得年份
- * @param year 年份
+ * @param type 年份
  * @returns {number}
  */
 
@@ -110,8 +157,8 @@ jyDate.prototype.getMonth = function (type) {
  * @returns {number}
  */
 
-jyDate.prototype.is_leap = function (year) {
-    return ( year || YEAR_NOW % 100 == 0 ? res = (year || YEAR_NOW % 400 == 0 ? 1 : 0) : res = (year || YEAR_NOW % 4 == 0 ? 1 : 0));
+jyDate.prototype.is_leap = function () {
+    return (YEAR_NOW % 100 == 0 ? res = (YEAR_NOW % 400 == 0 ? 1 : 0) : res = (YEAR_NOW % 4 == 0 ? 1 : 0));
 };
 
 /**
@@ -119,8 +166,8 @@ jyDate.prototype.is_leap = function (year) {
  * @param year 年份
  * @returns {Array}
  */
-jyDate.prototype.m_days = function (year) {
-    return [31, 28 + this.is_leap(year || YEAR_NOW), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+jyDate.prototype.m_days = function () {
+    return [31, 28 + this.is_leap(YEAR_NOW), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 };
 
 /**
@@ -129,10 +176,8 @@ jyDate.prototype.m_days = function (year) {
  * @param month 月份
  * @returns {number}
  */
-jyDate.prototype.firstday = function (year, month) {
-    return year && month ?
-        new Date(year, (month - 1), 1).getDay() :
-        new Date(YEAR_NOW, (MONTH_NOW - 1), 1).getDay();
+jyDate.prototype.firstday = function () {
+    return new Date(YEAR_NOW, (MONTH_NOW - 1), 1).getDay();
 };
 
 
@@ -142,12 +187,17 @@ jyDate.prototype.firstday = function (year, month) {
  * @param month 月份
  * @returns {number}
  */
-jyDate.prototype.tr_str = function (year, month) {
-    return year && month ?
-        Math.ceil((this.m_days(year)[month - 1] + this.firstday(year, month - 1)) / 7) :
-        Math.ceil((this.m_days()[MONTH_NOW - 1] + this.firstday()) / 7);
+jyDate.prototype.tr_str = function () {
+    return Math.ceil((this.m_days()[MONTH_NOW - 1] + this.firstday()) / 7);
 };
 
+
+/**
+ * 删除之前的DOM
+ */
+jyDate.prototype._deleteDom = function () {
+
+};
 
 /**
  * 创建标题文档
@@ -155,7 +205,7 @@ jyDate.prototype.tr_str = function (year, month) {
  * @param month 月份
  * @private
  */
-jyDate.prototype._createTitle = function (year, month) {
+jyDate.prototype._createTitle = function () {
     var fragment = document.createDocumentFragment();
     var otitle = document.createElement('div');
     otitle.setAttribute('class', 'jydaDe-head');
@@ -171,9 +221,9 @@ jyDate.prototype._createTitle = function (year, month) {
  * @param month 月份
  * @private
  */
-jyDate.prototype._create = function (year, month) {
-    var num = -(this.firstday(year, month) - 1) || -(this.firstday() - 1);
-    var len_row = this.tr_str(year, month) || this.tr_str();
+jyDate.prototype._create = function () {
+    var num = -(this.firstday() - 1);
+    var len_row = this.tr_str();
     var fragment = document.createDocumentFragment();
     var odiv = document.createElement('div');
     var ohtml = '';
@@ -182,13 +232,13 @@ jyDate.prototype._create = function (year, month) {
     for (var i = 0; i < len_row; i++) {
         ohtml += '<div class=\"day-row\">';
         for (var j = 0; j < 7; j++) {
-            if (num > (this.m_days(year, month)[month - 1] || this.m_days()[MONTH_NOW - 1])) {
+            if (num > this.m_days()[MONTH_NOW - 1]) {
                 break
             }
             if (num <= 0) {
                 ohtml += '<div>&nbsp;</div>';
             } else {
-                ohtml += '<div>' + num + '</div>';
+                ohtml += '<div><input type='+TYPE+' checked value='+num+'>' + '<label>'+num+'</label>'  + '</div>';
             }
             num++;
         }

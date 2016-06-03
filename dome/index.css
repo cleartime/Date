@@ -1,28 +1,53 @@
 .jydaDe {
     width: 100%;
     clear: left;
-    display:table;
-    border-collapse:separate;
+    display: table;
+    border-collapse: separate;
 }
-.week-row,.day-row {
-    display:table-row;
+
+.week-row, .day-row {
+    display: table-row;
 }
-.week-row>div,.day-row>div {
-     display:table-cell;
- }
-.jydaDe-head{
-width: 100%;
+
+.week-row > div, .day-row > div {
+    display: table-cell;
 }
-.jydaDe-head>div {
+
+.jydaDe-head {
+    width: 100%;
+}
+
+.jydaDe-head > div {
     width: 25%;
     float: left;
 }
-.jydaDe-head>div:last-child {
+
+.jydaDe-head > div:last-child {
     text-align: right;
     float: right;
 }
-.jydaDe-head #jydaDe-head{
+
+.jydaDe-head #jydaDe-head {
     text-align: center;
     width: 50%;
     margin: 0 auto;
+}
+.day-row{
+    position: relative;
+    margin: 10px;
+}
+.day-row > div input, .day-row > div label {
+}
+
+.day-row > div label {
+}
+.day-row > div input {
+    position: absolute;
+    display: block;
+    visibility: hidden;
+    z-index: 199;
+}
+
+.day-row > div input:checked ~ label {
+    border: 1px solid red
 }
