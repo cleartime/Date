@@ -1,6 +1,9 @@
 /**
  * Created by gxx on 16/6/2.
  */
+var YEAR_NOW = null;
+var MONTH_NOW = null;
+var DAY_NOW = null;
 
 function jyDate(jyDate) {
     var _date = new Date();
@@ -10,22 +13,44 @@ function jyDate(jyDate) {
     this._week = _date.getDay();//星期
     var self = this;
     var odiv = document.getElementById('jyDate');
-    odiv.appendChild(self._createTitle());
-    var prev = document.querySelector('#jydaDe-head');
-    var next = document.querySelector('.jydaDe-next');
 
-    function init() {
+
+    function init(year, month) {
+        YEAR_NOW = self._year;
+        MONTH_NOW = self._month;
+        change();
+        if (year && month) {
+            YEAR_NOW = year;
+            MONTH_NOW = month;
+            odiv.appendChild(self._create(year, month));
+            return
+        }
         odiv.appendChild(self._create());
     }
 
-    next.addEventListener('click', function () {
-        odiv.appendChild(self._create(self._year, (self._month)));
-    }, false);
+    function change() {
+        var prev = document.querySelector('.jydaDe-prev');
+        var next = document.querySelector('.jydaDe-next');
+        console.log(prev,next);
+        //next.addEventListener('click', function () {
+        //    odiv.appendChild(self._create(getYear(1), getMonth(1)));
+        //}, false);
+        //prev.addEventListener('click', function () {
+        //    odiv.appendChild(self._create(getYear(0), getMonth(0)));
+        //}, false)
+    }
+
+    function noClick() {
+
+    }
 
 
-    return init();
+    return {
+        init: function (year, month) {
+            init(year, month);
+        },
+    };
 }
-
 
 /**
  * 简单的函数封装，执行callback
@@ -35,6 +60,49 @@ function next(callback) {
     callback && callback();
 }
 
+
+/**
+ * 获得年份
+ * @param year 年份
+ * @returns {number}
+ */
+
+jyDate.prototype.getYear = function (type) {
+    if (MONTH_NOW + 1 == 12) {
+        return
+    }
+    if (!type) {
+        YEAR_NOW--;
+    } else {
+        YEAR_NOW++;
+    }
+    return YEAR_NOW
+};
+
+
+/**
+ * 获得月份
+ * @param month 月份
+ * @returns {number}
+ */
+
+jyDate.prototype.getMonth = function (type) {
+
+    if (!type) {
+        if (MONTH_NOW + 1 == 12) {
+            MONTH_NOW = 1;
+            return
+        }
+        MONTH_NOW ++;
+    } else {
+        if (MONTH_NOW + 1 == 1) {
+            MONTH_NOW = 12;
+            return
+        }
+        MONTH_NOW --;
+    }
+    return MONTH_NOW
+};
 /**
  * 判断是不是润年
  * @param year 年份
@@ -75,7 +143,7 @@ jyDate.prototype.firstday = function (year, month) {
  */
 jyDate.prototype.tr_str = function (year, month) {
     return year && month ?
-        Math.ceil((this.m_days(year)[month] + this.firstday(year, month)) / 7) :
+        Math.ceil((this.m_days(year)[month - 1] + this.firstday(year, month - 1)) / 7) :
         Math.ceil((this.m_days()[this._month] + this.firstday()) / 7);
 };
 
@@ -90,7 +158,7 @@ jyDate.prototype._createTitle = function (year, month) {
     var fragment = document.createDocumentFragment();
     var otitle = document.createElement('div');
     otitle.setAttribute('class', 'jydaDe-head');
-    otitle.innerHTML = '<div class="jydaDe-prev"> < </div><div id="jydaDe-head">' + (year || this._year ) + '年' + (month || this._month + 1) + '月' + '</div><div class="jydaDe-next"> > </div>';
+    otitle.innerHTML = '<div class="jydaDe-prev"> < </div><div id="jydaDe-head">' + (YEAR_NOW || this._year ) + '年' + (MONTH_NOW || this._month + 1) + '月' + '</div><div class="jydaDe-next"> > </div>';
     fragment.appendChild(otitle);
     return fragment;
 };
@@ -105,6 +173,7 @@ jyDate.prototype._createTitle = function (year, month) {
 jyDate.prototype._create = function (year, month) {
     var num = -(this.firstday(year, month - 1) - 1) || -(this.firstday() - 1);
     var len_row = this.tr_str(year, month) || this.tr_str();
+    console.log(len_row);
     var fragment = document.createDocumentFragment();
     var odiv = document.createElement('div');
     var ohtml = '';
@@ -126,12 +195,13 @@ jyDate.prototype._create = function (year, month) {
         ohtml += "</div>";
     }
     odiv.innerHTML = ohtml;
+    fragment.appendChild(this._createTitle());
     fragment.appendChild(odiv);
     return fragment;
 };
 
 
-(function () {
+module.exports = function () {
     return new jyDate();
-}());
+};
 
