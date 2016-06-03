@@ -17,8 +17,7 @@ function jyDate(jyDate) {
 
     function init(year, month) {
         YEAR_NOW = self._year;
-        MONTH_NOW = self._month;
-        change();
+        MONTH_NOW = self._month + 1;
         if (year && month) {
             YEAR_NOW = year;
             MONTH_NOW = month;
@@ -26,18 +25,18 @@ function jyDate(jyDate) {
             return
         }
         odiv.appendChild(self._create());
+        change();
     }
 
     function change() {
         var prev = document.querySelector('.jydaDe-prev');
         var next = document.querySelector('.jydaDe-next');
-        console.log(prev,next);
-        //next.addEventListener('click', function () {
-        //    odiv.appendChild(self._create(getYear(1), getMonth(1)));
-        //}, false);
-        //prev.addEventListener('click', function () {
-        //    odiv.appendChild(self._create(getYear(0), getMonth(0)));
-        //}, false)
+        next.addEventListener('click', function () {
+            odiv.appendChild(self._create(self.getYear(1), self.getMonth(1)));
+        }, false);
+        prev.addEventListener('click', function () {
+            odiv.appendChild(self._create(self.getYear(0), self.getMonth(0)));
+        }, false)
     }
 
     function noClick() {
@@ -68,13 +67,15 @@ function next(callback) {
  */
 
 jyDate.prototype.getYear = function (type) {
-    if (MONTH_NOW + 1 == 12) {
-        return
-    }
     if (!type) {
-        YEAR_NOW--;
+        if (MONTH_NOW == 1) {
+            YEAR_NOW--;
+            return
+        }
     } else {
-        YEAR_NOW++;
+        if (MONTH_NOW == 12) {
+            YEAR_NOW++;
+        }
     }
     return YEAR_NOW
 };
@@ -87,19 +88,19 @@ jyDate.prototype.getYear = function (type) {
  */
 
 jyDate.prototype.getMonth = function (type) {
-
     if (!type) {
-        if (MONTH_NOW + 1 == 12) {
-            MONTH_NOW = 1;
-            return
-        }
-        MONTH_NOW ++;
-    } else {
-        if (MONTH_NOW + 1 == 1) {
+        if (MONTH_NOW == 1) {
             MONTH_NOW = 12;
             return
         }
-        MONTH_NOW --;
+        MONTH_NOW--;
+    } else {
+        if (MONTH_NOW == 12) {
+            MONTH_NOW = 1;
+            return
+        }
+        MONTH_NOW++;
+
     }
     return MONTH_NOW
 };
@@ -110,7 +111,7 @@ jyDate.prototype.getMonth = function (type) {
  */
 
 jyDate.prototype.is_leap = function (year) {
-    return ( year || this._year % 100 == 0 ? res = (year || this._year % 400 == 0 ? 1 : 0) : res = (year || this._year % 4 == 0 ? 1 : 0));
+    return ( year || YEAR_NOW % 100 == 0 ? res = (year || YEAR_NOW % 400 == 0 ? 1 : 0) : res = (year || YEAR_NOW % 4 == 0 ? 1 : 0));
 };
 
 /**
@@ -119,7 +120,7 @@ jyDate.prototype.is_leap = function (year) {
  * @returns {Array}
  */
 jyDate.prototype.m_days = function (year) {
-    return [31, 28 + this.is_leap(year || this._year), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    return [31, 28 + this.is_leap(year || YEAR_NOW), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 };
 
 /**
@@ -130,8 +131,8 @@ jyDate.prototype.m_days = function (year) {
  */
 jyDate.prototype.firstday = function (year, month) {
     return year && month ?
-        new Date(year, month, 1).getDay() :
-        new Date(this._year, this._month, 1).getDay();
+        new Date(year, (month - 1), 1).getDay() :
+        new Date(YEAR_NOW, (MONTH_NOW - 1), 1).getDay();
 };
 
 
@@ -144,7 +145,7 @@ jyDate.prototype.firstday = function (year, month) {
 jyDate.prototype.tr_str = function (year, month) {
     return year && month ?
         Math.ceil((this.m_days(year)[month - 1] + this.firstday(year, month - 1)) / 7) :
-        Math.ceil((this.m_days()[this._month] + this.firstday()) / 7);
+        Math.ceil((this.m_days()[MONTH_NOW - 1] + this.firstday()) / 7);
 };
 
 
@@ -158,7 +159,7 @@ jyDate.prototype._createTitle = function (year, month) {
     var fragment = document.createDocumentFragment();
     var otitle = document.createElement('div');
     otitle.setAttribute('class', 'jydaDe-head');
-    otitle.innerHTML = '<div class="jydaDe-prev"> < </div><div id="jydaDe-head">' + (YEAR_NOW || this._year ) + '年' + (MONTH_NOW || this._month + 1) + '月' + '</div><div class="jydaDe-next"> > </div>';
+    otitle.innerHTML = '<div class="jydaDe-prev"> < </div><div id="jydaDe-head">' + YEAR_NOW + '年' + (MONTH_NOW) + '月' + '</div><div class="jydaDe-next"> > </div>';
     fragment.appendChild(otitle);
     return fragment;
 };
@@ -171,9 +172,8 @@ jyDate.prototype._createTitle = function (year, month) {
  * @private
  */
 jyDate.prototype._create = function (year, month) {
-    var num = -(this.firstday(year, month - 1) - 1) || -(this.firstday() - 1);
+    var num = -(this.firstday(year, month) - 1) || -(this.firstday() - 1);
     var len_row = this.tr_str(year, month) || this.tr_str();
-    console.log(len_row);
     var fragment = document.createDocumentFragment();
     var odiv = document.createElement('div');
     var ohtml = '';
@@ -182,7 +182,7 @@ jyDate.prototype._create = function (year, month) {
     for (var i = 0; i < len_row; i++) {
         ohtml += '<div class=\"day-row\">';
         for (var j = 0; j < 7; j++) {
-            if (num > (this.m_days(year, month)[month] || this.m_days()[this._month])) {
+            if (num > (this.m_days(year, month)[month - 1] || this.m_days()[MONTH_NOW - 1])) {
                 break
             }
             if (num <= 0) {
