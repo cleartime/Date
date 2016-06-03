@@ -1,14 +1,16 @@
 /**
  * Created by gxx on 16/6/2.
  */
-var YEAR_NOW = null;
-var MONTH_NOW = null;
-var DAY_NOW = null;
-var ISCLICK = true;
-var ISCLICKDAY = true;
-var CLICKTYPE = 'click';
-var INPUTTYPE = 'checkbox';
-var DATAARR = null;
+var FRIST_DATE = null;//初始年月日
+var YEAR_NOW = null;//当前年
+var MONTH_NOW = null;//当前月
+var DAY_NOW = null;//当前日
+var ISCLICK = true;//是否可以点击切换日期
+var ISCLICKDAY = true;//是否可以点击选择日期
+var CLICKTYPE = 'click';//点击类型
+var INPUTTYPE = 'checkbox';//点击日期是否可以选择多个
+var DATAARR = null;//传参日期数组
+var ISACTOIN = false;//是否显示日期高聊
 
 function jyDate() {
     var _date = new Date();
@@ -22,6 +24,8 @@ function jyDate() {
     function init(config) {
         YEAR_NOW = self._year;
         MONTH_NOW = self._month + 1;
+        DAY_NOW = self._day;
+        FRIST_DATE = DATAARR = (YEAR_NOW + '-' + MONTH_NOW + '-' + DAY_NOW).split();
         if (config) {
             self._config(config);
             odiv.appendChild(self._create());
@@ -87,10 +91,10 @@ function next(callback) {
 
 jyDate.prototype._config = function (config) {
     if (config.data) {
-        this.setData(config.data);
+        FRIST_DATE = DATAARR = config.data.split();
     }
     if (config.dateArr) {
-        this.setDay(config.dateArr);
+        DATAARR = config.dateArr;
     }
     ISCLICK = config.isClick === false ? false : true;
     ISCLICKDAY = config.isClickDay === false ? false : true;
@@ -103,9 +107,8 @@ jyDate.prototype._config = function (config) {
  * @param dateArr 年月日数组
  */
 
-jyDate.prototype.setDay = function (dateArr) {
-    DATAARR = dateArr;
-    return true
+jyDate.prototype.setDay = function () {
+    this.setData(DATAARR);
 };
 
 /**
@@ -113,15 +116,19 @@ jyDate.prototype.setDay = function (dateArr) {
  * @param data
  */
 jyDate.prototype.setData = function (data) {
+    var _dataArr_year = _dataArr_month = _dataArr_day = [];
     var arr = ['-', ' ', ','];
     for (var i = 0, len = arr.length; i < len; i++) {
-        YEAR_NOW = data.split(arr[i])[0];
-        MONTH_NOW = data.split(arr[i])[1];
-        DAY_NOW = data.split(arr[i])[2];
-        if (data.split(arr[i]).length === 3) {
-            break
+        for(var j= 0,len=data.length;j<len;j++){
+            _dataArr_year.push(data[j].split(arr[i])[0]);
+            _dataArr_month.push(data[j].split(arr[i])[1]);
+            _dataArr_day.push(data[j].split(arr[i])[2]);
+            if (data[j].split(arr[i]).length === 3) {
+                break
+            }
         }
     }
+    console.log(_dataArr_year+'\n'+_dataArr_month+'\n'+_dataArr_day)
 };
 
 /**
@@ -250,9 +257,12 @@ jyDate.prototype._create = function () {
             } else {
                 if (!ISCLICKDAY) {
                     ohtml += '<div><label>' + num + '</label>' + '</div>';
+                    return
                 }
-                else {
-                    ohtml += '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input">' + '<label>' + num + '</label>' + '</div>';
+                if (num == this.setDay()) {
+                    ohtml += '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" checked >' + '<label>' + num + '</label>' + '</div>';
+                } else {
+                    ohtml += '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" >' + '<label>' + num + '</label>' + '</div>';
                 }
             }
             num++;
