@@ -108,7 +108,14 @@ jyDate.prototype._config = function (config) {
  */
 
 jyDate.prototype.setDay = function () {
-    this.setData(DATAARR);
+    //for(var i= 0,len=30;i<len;i++){
+    //    if(YEAR_NOW===data.year[i]){
+    //        if(MONTH_NOW===data.month[i]){
+    //            console.log(data.day[i]);
+    //            return data.day[i]
+    //        }
+    //    }
+    //}
 };
 
 /**
@@ -116,19 +123,27 @@ jyDate.prototype.setDay = function () {
  * @param data
  */
 jyDate.prototype.setData = function (data) {
+
     var _dataArr_year = _dataArr_month = _dataArr_day = [];
     var arr = ['-', ' ', ','];
     for (var i = 0, len = arr.length; i < len; i++) {
-        for(var j= 0,len=data.length;j<len;j++){
-            _dataArr_year.push(data[j].split(arr[i])[0]);
-            _dataArr_month.push(data[j].split(arr[i])[1]);
-            _dataArr_day.push(data[j].split(arr[i])[2]);
+        for (var j = 0, len = data.length; j < len; j++) {
+            _dataArr_year = (data[j].split(arr[i])[0]);
+            _dataArr_month = (data[j].split(arr[i])[1]);
+            _dataArr_day = (data[j].split(arr[i])[2]);
             if (data[j].split(arr[i]).length === 3) {
                 break
             }
         }
     }
-    console.log(_dataArr_year+'\n'+_dataArr_month+'\n'+_dataArr_day)
+    return function (){
+        return {
+            year:_dataArr_year,
+            month:_dataArr_month,
+            day:_dataArr_day
+        }
+    };
+    //console.log(_dataArr_year + '\n' + _dataArr_month + '\n' + _dataArr_day)
 };
 
 /**
