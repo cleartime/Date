@@ -287,7 +287,6 @@ jyDate.prototype._create = function () {
     var fragment = document.createDocumentFragment();
     var odiv = document.createElement('div');
     var ohtml = '';
-    var arr = [];
     odiv.setAttribute('class', 'jydaDe');
     ohtml += '<div class=\"week-row\"><div>周日</div><div>周一</div><div>周二</div><div>周三</div><div>周四</div><div>周五</div><div>周六</div></div>';
     for (var i = 0; i < len_row; i++) {
@@ -299,11 +298,10 @@ jyDate.prototype._create = function () {
             if (num <= 0) {
                 ohtml += '<div>&nbsp;</div>';
             } else {
-                arr.push(num);
                 if (!ISCLICKDAY) {
                     ohtml += '<div><label>' + num + '</label>' + '</div>';
                 }
-                else if () {
+                else if (num==this.setDay()) {
                     ohtml += '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" checked >' + '<label>' + num + '</label>' + '</div>';
                 } else {
                     ohtml += '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" >' + '<label>' + num + '</label>' + '</div>';
