@@ -79,12 +79,16 @@ function next(callback) {
  */
 
 jyDate.prototype._config = function (config) {
-    HASARGUMENT = config ? true : false;
     if (config.data) {
         FRIST_DATE = DATAARR = config.data.split();
+        var data = this.setData(FRIST_DATE)();
+        YEAR_NOW = data.year;
+        MONTH_NOW = data.month;
+        DAY_NOW = data.day;
     }
-    if (config.dateArr) {
-        DATAARR = config.dateArr;
+    if (config.dataArr) {
+        HASARGUMENT = true;
+        DATAARR = config.dataArr;
     }
     ISCLICK = config.isClick === false ? false : true;
     ISCLICKDAY = config.isClickDay === false ? false : true;
@@ -98,11 +102,11 @@ jyDate.prototype._config = function (config) {
  */
 
 jyDate.prototype.setDay = function () {
-    if(!HASARGUMENT){
+    if(!HASARGUMENT || FRIST_DATE.length==1){
         return DAY_NOW
     }
-
-
+    //var data = this.setData(DATAARR)();
+    console.log(DATAARR);
 };
 
 /**
@@ -110,7 +114,6 @@ jyDate.prototype.setDay = function () {
  * @param data
  */
 jyDate.prototype.setData = function (data) {
-
     var _dataArr_year = _dataArr_month = _dataArr_day = [];
     var arr = ['-', ' ', ','];
     for (var i = 0, len = arr.length; i < len; i++) {
