@@ -81,10 +81,10 @@ function next(callback) {
 jyDate.prototype._config = function (config) {
     if (config.data) {
         FRIST_DATE = DATAARR = config.data.split();
-        var data = this.setData(FRIST_DATE)();
-        YEAR_NOW = data.year;
-        MONTH_NOW = data.month;
-        DAY_NOW = data.day;
+        //var data = this.setData(FRIST_DATE)();
+        //YEAR_NOW = data.year[0];
+        //MONTH_NOW = data.month[0];
+        //DAY_NOW = data.day[0];
     }
     if (config.dataArr) {
         HASARGUMENT = true;
@@ -102,11 +102,39 @@ jyDate.prototype._config = function (config) {
  */
 
 jyDate.prototype.setDay = function () {
-    if(!HASARGUMENT || FRIST_DATE.length==1){
-        return DAY_NOW
+    var frist_year = FRIST_DATE[0].split('-')[0];
+    var frist_month = FRIST_DATE[0].split('-')[1];
+    var frist_day = FRIST_DATE[0].split('-')[2];
+    if (!HASARGUMENT) {
+        if (frist_year != YEAR_NOW) {
+            return
+        }
+        if (frist_month != MONTH_NOW) {
+            return
+        }
+
+        if (!HASARGUMENT || FRIST_DATE.length == 1) {
+            return DAY_NOW
+        }
+    } else {
+        var data = this.setData(DATAARR)();
+        var year_now = data.year;
+        var month_now = data.month;
+        var day_now = data.day;
+        year_now.forEach(function (i) {
+            if (frist_year != i) {
+                return
+            }
+        });
+        month_now.forEach(function (i) {
+            if (month_now != i) {
+                return
+            }
+        });
+        return day_now
     }
-    //var data = this.setData(DATAARR)();
-    console.log(DATAARR);
+    ;
+
 };
 
 /**
@@ -114,13 +142,13 @@ jyDate.prototype.setDay = function () {
  * @param data
  */
 jyDate.prototype.setData = function (data) {
-    var _dataArr_year = _dataArr_month = _dataArr_day = [];
+    var _dataArr_year = [], _dataArr_month = [], _dataArr_day = [];
     var arr = ['-', ' ', ','];
     for (var i = 0, len = arr.length; i < len; i++) {
         for (var j = 0, len = data.length; j < len; j++) {
-            _dataArr_year = (data[j].split(arr[i])[0]);
-            _dataArr_month = (data[j].split(arr[i])[1]);
-            _dataArr_day = (data[j].split(arr[i])[2]);
+            _dataArr_year.push(data[j].split('-')[0]);
+            _dataArr_month.push(data[j].split('-')[1]);
+            _dataArr_day.push(data[j].split('-')[2]);
             if (data[j].split(arr[i]).length === 3) {
                 break
             }
@@ -220,6 +248,16 @@ jyDate.prototype.tr_str = function () {
     return Math.ceil((this.m_days()[MONTH_NOW - 1] + this.firstday()) / 7);
 };
 
+/**
+ * 对比2个数组,取相同的数
+ * @param arr1
+ * @param arr2
+ * @private
+ */
+jyDate.prototype._comparArr = function (arry1, arry2) {
+
+};
+
 
 /**
  * 创建标题文档
@@ -249,6 +287,7 @@ jyDate.prototype._create = function () {
     var fragment = document.createDocumentFragment();
     var odiv = document.createElement('div');
     var ohtml = '';
+    var arr = [];
     odiv.setAttribute('class', 'jydaDe');
     ohtml += '<div class=\"week-row\"><div>周日</div><div>周一</div><div>周二</div><div>周三</div><div>周四</div><div>周五</div><div>周六</div></div>';
     for (var i = 0; i < len_row; i++) {
@@ -260,19 +299,21 @@ jyDate.prototype._create = function () {
             if (num <= 0) {
                 ohtml += '<div>&nbsp;</div>';
             } else {
+                arr.push(num);
                 if (!ISCLICKDAY) {
                     ohtml += '<div><label>' + num + '</label>' + '</div>';
-                    return
                 }
-                if (num == this.setDay()) {
+                else if () {
                     ohtml += '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" checked >' + '<label>' + num + '</label>' + '</div>';
                 } else {
                     ohtml += '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" >' + '<label>' + num + '</label>' + '</div>';
                 }
+
             }
             num++;
         }
         ohtml += "</div>";
+
     }
     odiv.innerHTML = ohtml;
     fragment.appendChild(this._createTitle());
