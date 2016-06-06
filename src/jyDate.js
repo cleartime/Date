@@ -10,7 +10,8 @@ var ISCLICKDAY = true;//是否可以点击选择日期
 var CLICKTYPE = 'click';//点击类型
 var INPUTTYPE = 'checkbox';//点击日期是否可以选择多个
 var DATAARR = null;//传参日期数组
-var ISACTOIN = false;//是否显示日期高聊
+var ISACTOIN = false;//是否显示日期高亮
+var HASARGUMENT = false;//判断有没有传参
 
 function jyDate() {
     var _date = new Date();
@@ -55,21 +56,9 @@ function jyDate() {
     }
 
 
-    function getDay() {
-
-        var olabel = document.querySelector('label');
-        olabel.addEventListener(CLICKTYPE, function () {
-
-        }, false)
-
-    }
-
     return {
         init: function (config) {
             init(config);
-        },
-        getDay: function () {
-            return getDay();
         }
     };
 }
@@ -90,6 +79,7 @@ function next(callback) {
  */
 
 jyDate.prototype._config = function (config) {
+    HASARGUMENT = config ? true : false;
     if (config.data) {
         FRIST_DATE = DATAARR = config.data.split();
     }
@@ -108,14 +98,11 @@ jyDate.prototype._config = function (config) {
  */
 
 jyDate.prototype.setDay = function () {
-    //for(var i= 0,len=30;i<len;i++){
-    //    if(YEAR_NOW===data.year[i]){
-    //        if(MONTH_NOW===data.month[i]){
-    //            console.log(data.day[i]);
-    //            return data.day[i]
-    //        }
-    //    }
-    //}
+    if(!HASARGUMENT){
+        return DAY_NOW
+    }
+
+
 };
 
 /**
@@ -136,11 +123,11 @@ jyDate.prototype.setData = function (data) {
             }
         }
     }
-    return function (){
+    return function () {
         return {
-            year:_dataArr_year,
-            month:_dataArr_month,
-            day:_dataArr_day
+            year: _dataArr_year,
+            month: _dataArr_month,
+            day: _dataArr_day
         }
     };
     //console.log(_dataArr_year + '\n' + _dataArr_month + '\n' + _dataArr_day)
