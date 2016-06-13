@@ -311,7 +311,6 @@ jyDate.prototype._create = function () {
             num++;
         }
         ohtml += "</div>";
-
     }
     odiv.innerHTML = ohtml;
     fragment.appendChild(this._createTitle());
