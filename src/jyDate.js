@@ -12,6 +12,7 @@ var INPUTTYPE = 'checkbox';//点击日期是否可以选择多个
 var DATAARR = null;//传参日期数组
 var ISACTOIN = false;//是否显示日期高亮
 var HASARGUMENT = false;//判断有没有传参
+var IS_SHOW_DAY_NOW = true;//默认当前日高亮
 
 function jyDate() {
     var _date = new Date();
@@ -81,10 +82,10 @@ function next(callback) {
 jyDate.prototype._config = function (config) {
     if (config.data) {
         FRIST_DATE = DATAARR = config.data.split();
-        //var data = this.setData(FRIST_DATE)();
-        //YEAR_NOW = data.year[0];
-        //MONTH_NOW = data.month[0];
-        //DAY_NOW = data.day[0];
+        var data = this.setData(FRIST_DATE)();
+        YEAR_NOW = data.year[0];
+        MONTH_NOW = data.month[0];
+        DAY_NOW = data.day[0];
     }
     if (config.dataArr) {
         HASARGUMENT = true;
@@ -92,6 +93,7 @@ jyDate.prototype._config = function (config) {
     }
     ISCLICK = config.isClick === false ? false : true;
     ISCLICKDAY = config.isClickDay === false ? false : true;
+    IS_SHOW_DAY_NOW = config.isActiveToday === false ? false : true;
     CLICKTYPE = config.clickType || 'click';
     INPUTTYPE = config.inputType || 'checkbox';
 };
@@ -114,7 +116,7 @@ jyDate.prototype.setDay = function () {
         }
 
         if (!HASARGUMENT || FRIST_DATE.length == 1) {
-            return DAY_NOW
+            return [DAY_NOW]
         }
     } else {
         var data = this.setData(DATAARR)();
@@ -132,8 +134,7 @@ jyDate.prototype.setDay = function () {
             }
         });
         return day_now
-    }
-    ;
+    };
 };
 
 /**
@@ -286,6 +287,7 @@ jyDate.prototype._create = function () {
     var fragment = document.createDocumentFragment();
     var odiv = document.createElement('div');
     var ohtml = '';
+    var arr = [2];
     odiv.setAttribute('class', 'jydaDe');
     ohtml += '<div class=\"week-row\"><div>周日</div><div>周一</div><div>周二</div><div>周三</div><div>周四</div><div>周五</div><div>周六</div></div>';
     for (var i = 0; i < len_row; i++) {
@@ -300,22 +302,27 @@ jyDate.prototype._create = function () {
                 if (!ISCLICKDAY) {
                     ohtml += '<div><label>' + num + '</label>' + '</div>';
                 }
-                else if (!HASARGUMENT) {
-                    var arrNum = [12, 13, 14];
-                    for (var k = 0, len = arrNum.length; k < len; k++) {
-                        if (num == arrNum[k]) {
-                            ohtml += '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" checked >' + '<label>' + num + '</label>' + '</div>';
+                else {
+                    var ohtml1 = '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" checked >' + '<label>' + num + '</label>' + '</div>';
+                    var ohtml2 = '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" >' + '<label>' + num + '</label>' + '</div>';
+                    var arrNum = {};
+                    for (var k = 0, len = arr.length; k < len; k++) {
+                        arrNum[arr[k]] = '';
+                    }
+                    if(HASARGUMENT){
+                        if (arrNum.hasOwnProperty(num)) {
+                            ohtml += ohtml1;
+                        } else {
+                            ohtml += ohtml2;
                         }
-                        if(k==0){
-                            ohtml += '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" >' + '<label>' + num + '</label>' + '</div>';
+                    }else{
+                        if(IS_SHOW_DAY_NOW && num==DAY_NOW){
+                            ohtml += ohtml1;
+                        }else{
+                            ohtml += ohtml2;
                         }
                     }
-
                 }
-                else {
-                    ohtml += '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" >' + '<label>' + num + '</label>' + '</div>';
-                }
-
             }
             num++;
         }
