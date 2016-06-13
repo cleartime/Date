@@ -134,7 +134,6 @@ jyDate.prototype.setDay = function () {
         return day_now
     }
     ;
-
 };
 
 /**
@@ -301,9 +300,19 @@ jyDate.prototype._create = function () {
                 if (!ISCLICKDAY) {
                     ohtml += '<div><label>' + num + '</label>' + '</div>';
                 }
-                else if (num==this.setDay()) {
-                    ohtml += '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" checked >' + '<label>' + num + '</label>' + '</div>';
-                } else {
+                else if (!HASARGUMENT) {
+                    var arrNum = [12, 13, 14];
+                    for (var k = 0, len = arrNum.length; k < len; k++) {
+                        if (num == arrNum[k]) {
+                            ohtml += '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" checked >' + '<label>' + num + '</label>' + '</div>';
+                        }
+                        if(k==0){
+                            ohtml += '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" >' + '<label>' + num + '</label>' + '</div>';
+                        }
+                    }
+
+                }
+                else {
                     ohtml += '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" >' + '<label>' + num + '</label>' + '</div>';
                 }
 
