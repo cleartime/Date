@@ -109,12 +109,11 @@ jyDate.prototype.setDay = function () {
     var frist_day = FRIST_DATE[0].split('-')[2];
     if (!HASARGUMENT) {
         if (frist_year != YEAR_NOW) {
-            return
+            return []
         }
         if (frist_month != MONTH_NOW) {
-            return
+            return []
         }
-
         if (!HASARGUMENT || FRIST_DATE.length == 1) {
             return [DAY_NOW]
         }
@@ -125,12 +124,13 @@ jyDate.prototype.setDay = function () {
         var day_now = data.day;
         year_now.forEach(function (i) {
             if (frist_year != i) {
-                return
+                return []
             }
         });
+
         month_now.forEach(function (i) {
             if (month_now != i) {
-                return
+                return []
             }
         });
         return day_now
@@ -143,17 +143,17 @@ jyDate.prototype.setDay = function () {
  */
 jyDate.prototype.setData = function (data) {
     var _dataArr_year = [], _dataArr_month = [], _dataArr_day = [];
-    var arr = ['-', ' ', ','];
-    for (var i = 0, len = arr.length; i < len; i++) {
+    //var arr = ['-', ' ', ','];
+    //for (var i = 0, len = arr.length; i < len; i++) {
         for (var j = 0, len = data.length; j < len; j++) {
             _dataArr_year.push(data[j].split('-')[0]);
             _dataArr_month.push(data[j].split('-')[1]);
             _dataArr_day.push(data[j].split('-')[2]);
-            if (data[j].split(arr[i]).length === 3) {
-                break
-            }
+            //if (data[j].split(arr[i]).length === 3) {
+            //    break
+            //}
         }
-    }
+    //}
     return function () {
         return {
             year: _dataArr_year,
@@ -287,7 +287,7 @@ jyDate.prototype._create = function () {
     var fragment = document.createDocumentFragment();
     var odiv = document.createElement('div');
     var ohtml = '';
-    var arr = [2];
+    var arr = this.setDay();
     odiv.setAttribute('class', 'jydaDe');
     ohtml += '<div class=\"week-row\"><div>周日</div><div>周一</div><div>周二</div><div>周三</div><div>周四</div><div>周五</div><div>周六</div></div>';
     for (var i = 0; i < len_row; i++) {
