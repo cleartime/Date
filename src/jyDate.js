@@ -16,7 +16,7 @@ var IS_SHOW_DAY_NOW = true;//默认当前日高亮
 var DATAINTERVAL = null;//设置时间间隔(多少天可以点击)
 
 
-function jyDate() {
+function jyDate(ca) {
     var _date = new Date();
     this._year = _date.getFullYear();//年
     this._month = _date.getMonth();//月
@@ -58,12 +58,13 @@ function jyDate() {
         }, false)
     }
 
-
     return {
         init: function (config) {
             init(config);
         }
     };
+
+
 }
 
 /**
@@ -94,6 +95,7 @@ jyDate.prototype._config = function (config) {
         DATAARR = config.dataArr;
     }
     if (config.dataInterval) {
+        HASARGUMENT = true;
         DATAINTERVAL = config.dataInterval;
     }
     ISCLICK = config.isClick === false ? false : true;
@@ -108,7 +110,7 @@ jyDate.prototype._config = function (config) {
  * @param dateArr 年月日数组
  */
 
-jyDate.prototype.setDay = function () {
+jyDate.prototype.setDay = function (data) {
     var frist_year = FRIST_DATE[0].split('-')[0];
     var frist_month = FRIST_DATE[0].split('-')[1];
     var frist_day = FRIST_DATE[0].split('-')[2];
@@ -123,7 +125,12 @@ jyDate.prototype.setDay = function () {
             return [DAY_NOW]
         }
     } else {
-        var data = this.setData(DATAARR)();
+        var data = {};
+        if (data) {
+            data = new Date().date_to_timestamp(FRIST_DATE)();
+        } else {
+            data = this.setData(DATAARR)();
+        }
         var year_now = data.year;
         var month_now = data.month;
         var day_now = data.day;
@@ -214,6 +221,56 @@ jyDate.prototype.getMonth = function (type) {
     }
     return MONTH_NOW
 };
+
+/**
+ * 判断时间区域内能不能点击
+ * @param year 年份
+ * @returns {number}
+ */
+
+jyDate.prototype.is_click = function () {
+};
+
+/**
+ * 获取时间戳
+ * @param data
+ * @returns {number}
+ */
+Date.prototype.date_to_timestamp = function (data) {
+    var str = data.toString();
+    var _dataArr_year = [], _dataArr_month = [], _dataArr_day = [];
+    for (var i = 1; i <= DATAINTERVAL; i++) {
+        _dataArr_year.push(new Date().get_to_timestamp(str, i, 1));
+        _dataArr_month.push(new Date().get_to_timestamp(str, i, 2));
+        _dataArr_day.push(new Date().get_to_timestamp(str, i, 3));
+    }
+    return function () {
+        return {
+            year: _dataArr_year,
+            month: _dataArr_month,
+            day: _dataArr_day
+        }
+    };
+};
+
+/**
+ * 提取时间
+ * @param data
+ * @returns {Function}
+ */
+Date.prototype.get_to_timestamp = function (str, data, num) {
+    var newdata = new Date(new Date(str.replace(/-/g, '/')).getTime() + (24 * 60 * 60 * 1000) * data);
+    if (num == 1) {
+        return newdata.getFullYear();
+    }
+    if (num == 2) {
+        return newdata.getMonth() + 1;
+    }
+    else {
+        return newdata.getDate();
+    }
+};
+
 /**
  * 判断是不是润年
  * @param year 年份
@@ -293,32 +350,41 @@ jyDate.prototype._create = function () {
     var fragment = document.createDocumentFragment();
     var odiv = document.createElement('div');
     var ohtml = '';
-    var arr = this.setDay();
+    var arr = !!DATAINTERVAL ? this.setDay(1) : this.setDay();
     var isDisabled = 'disabled';
     odiv.setAttribute('class', 'jydaDe');
     ohtml += '<div class=\"week-row\"><div>周日</div><div>周一</div><div>周二</div><div>周三</div><div>周四</div><div>周五</div><div>周六</div></div>';
     for (var i = 0; i < len_row; i++) {
         ohtml += '<div class=\"day-row\">';
         for (var j = 0; j < 7; j++) {
+            var ohtml1 = '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" checked >' + '<label>' + num + '</label>' + '</div>';//设置高亮
+            var ohtml2 = '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" >' + '<label>' + num + '</label>' + '</div>';//设置不高亮
+            var ohtml3 = '<div>&nbsp;</div>';//设置空值
+            var ohtml4 = '<div class="jydaDe-disabled"><label>' + num + '</label>' + '</div>';//设置不可点击
             if (num > this.m_days()[MONTH_NOW - 1]) {
                 break
             }
             if (num <= 0) {
-                ohtml += '<div>&nbsp;</div>';
+                ohtml += ohtml3;
             } else {
+                var arrNum = {};
+                var len = arr.length;
+                if (len > 0) {
+                    for (var k = 0; k < len; k++) {
+                        arrNum[arr[k]] = '';
+                    }
+                }
                 if (!ISCLICKDAY) {
-                    ohtml += '<div><label>' + num + '</label>' + '</div>';
+                    ohtml += ohtml4;
+                }
+                else if (!!DATAINTERVAL) {
+                    if (arrNum.hasOwnProperty(num)) {
+                        ohtml += ohtml1;
+                    } else {
+                        ohtml += ohtml4;
+                    }
                 }
                 else {
-                    var ohtml1 = '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" checked >' + '<label>' + num + '</label>' + '</div>';
-                    var ohtml2 = '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" >' + '<label>' + num + '</label>' + '</div>';
-                    var arrNum = {};
-                    var len = arr.length;
-                    if (len > 0) {
-                        for (var k = 0; k < len; k++) {
-                            arrNum[arr[k]] = '';
-                        }
-                    }
                     if (HASARGUMENT) {
                         if (arrNum.hasOwnProperty(num)) {
                             ohtml += ohtml1;
@@ -345,7 +411,7 @@ jyDate.prototype._create = function () {
 };
 
 
-module.exports = function () {
-    return new jyDate();
+module.exports = function (ca) {
+    return new jyDate(ca);
 };
 
