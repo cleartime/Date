@@ -98,7 +98,7 @@ jyDate.prototype._config = function (config) {
         HASARGUMENT = true;
         DATAINTERVAL = config.dataInterval;
     }
-    ISCLICK = config.isClick === false ? false : true;
+    ISCLICK = config.isChangMonth === false ? false : true;
     ISCLICKDAY = config.isClickDay === false ? false : true;
     IS_SHOW_DAY_NOW = config.isActiveToday === false ? false : true;
     CLICKTYPE = config.clickType || 'click';
@@ -125,15 +125,15 @@ jyDate.prototype.setDay = function (data) {
             return [DAY_NOW]
         }
     } else {
-        var data = {};
+        var dataArr = {};
         if (data) {
-            data = new Date().date_to_timestamp(FRIST_DATE)();
+            dataArr = new Date().date_to_timestamp(FRIST_DATE)();
         } else {
-            data = this.setData(DATAARR)();
+            dataArr = this.setData(DATAARR)();
         }
-        var year_now = data.year;
-        var month_now = data.month;
-        var day_now = data.day;
+        var year_now = dataArr.year;
+        var month_now = dataArr.month;
+        var day_now = dataArr.day;
         year_now.forEach(function (t, i) {
             if (YEAR_NOW != t) {
                 delete day_now[i];
