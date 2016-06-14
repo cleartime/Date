@@ -129,7 +129,7 @@ jyDate.prototype.setDay = function () {
         var day_now = data.day;
         year_now.forEach(function (t, i) {
             if (YEAR_NOW != t) {
-                delete day_now[i]
+                delete day_now[i];
                 return []
             }
         });
