@@ -13,6 +13,8 @@ var DATAARR = null;//传参日期数组
 var ISACTOIN = false;//是否显示日期高亮
 var HASARGUMENT = false;//判断有没有传参
 var IS_SHOW_DAY_NOW = true;//默认当前日高亮
+var DATAINTERVAL = null;//设置时间间隔(多少天可以点击)
+
 
 function jyDate() {
     var _date = new Date();
@@ -91,6 +93,9 @@ jyDate.prototype._config = function (config) {
         HASARGUMENT = true;
         DATAARR = config.dataArr;
     }
+    if (config.dataInterval) {
+        DATAINTERVAL = config.dataInterval;
+    }
     ISCLICK = config.isClick === false ? false : true;
     ISCLICKDAY = config.isClickDay === false ? false : true;
     IS_SHOW_DAY_NOW = config.isActiveToday === false ? false : true;
@@ -122,19 +127,21 @@ jyDate.prototype.setDay = function () {
         var year_now = data.year;
         var month_now = data.month;
         var day_now = data.day;
-        year_now.forEach(function (i) {
-            if (frist_year != i) {
+        year_now.forEach(function (t, i) {
+            if (YEAR_NOW != t) {
+                delete day_now[i]
                 return []
             }
         });
-
-        month_now.forEach(function (i) {
-            if (month_now != i) {
+        month_now.forEach(function (t, i) {
+            if (MONTH_NOW != t) {
+                delete day_now[i];
                 return []
             }
         });
         return day_now
-    };
+    }
+    ;
 };
 
 /**
@@ -145,14 +152,14 @@ jyDate.prototype.setData = function (data) {
     var _dataArr_year = [], _dataArr_month = [], _dataArr_day = [];
     //var arr = ['-', ' ', ','];
     //for (var i = 0, len = arr.length; i < len; i++) {
-        for (var j = 0, len = data.length; j < len; j++) {
-            _dataArr_year.push(data[j].split('-')[0]);
-            _dataArr_month.push(data[j].split('-')[1]);
-            _dataArr_day.push(data[j].split('-')[2]);
-            //if (data[j].split(arr[i]).length === 3) {
-            //    break
-            //}
-        }
+    for (var j = 0, len = data.length; j < len; j++) {
+        _dataArr_year.push(data[j].split('-')[0]);
+        _dataArr_month.push(data[j].split('-')[1]);
+        _dataArr_day.push(data[j].split('-')[2]);
+        //if (data[j].split(arr[i]).length === 3) {
+        //    break
+        //}
+    }
     //}
     return function () {
         return {
@@ -204,7 +211,6 @@ jyDate.prototype.getMonth = function (type) {
             return
         }
         MONTH_NOW++;
-
     }
     return MONTH_NOW
 };
@@ -288,6 +294,7 @@ jyDate.prototype._create = function () {
     var odiv = document.createElement('div');
     var ohtml = '';
     var arr = this.setDay();
+    var isDisabled = 'disabled';
     odiv.setAttribute('class', 'jydaDe');
     ohtml += '<div class=\"week-row\"><div>周日</div><div>周一</div><div>周二</div><div>周三</div><div>周四</div><div>周五</div><div>周六</div></div>';
     for (var i = 0; i < len_row; i++) {
@@ -306,19 +313,22 @@ jyDate.prototype._create = function () {
                     var ohtml1 = '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" checked >' + '<label>' + num + '</label>' + '</div>';
                     var ohtml2 = '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" >' + '<label>' + num + '</label>' + '</div>';
                     var arrNum = {};
-                    for (var k = 0, len = arr.length; k < len; k++) {
-                        arrNum[arr[k]] = '';
+                    var len = arr.length;
+                    if (len > 0) {
+                        for (var k = 0; k < len; k++) {
+                            arrNum[arr[k]] = '';
+                        }
                     }
-                    if(HASARGUMENT){
+                    if (HASARGUMENT) {
                         if (arrNum.hasOwnProperty(num)) {
                             ohtml += ohtml1;
                         } else {
                             ohtml += ohtml2;
                         }
-                    }else{
-                        if(IS_SHOW_DAY_NOW && num==DAY_NOW){
+                    } else {
+                        if (IS_SHOW_DAY_NOW && num == DAY_NOW && len > 0) {
                             ohtml += ohtml1;
-                        }else{
+                        } else {
                             ohtml += ohtml2;
                         }
                     }
