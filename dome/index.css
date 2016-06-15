@@ -14,12 +14,15 @@
     text-align: center;
     display: table-row;
 }
-
 .week-row > div, .day-row > div {
+    height: 40px;
+    line-height: 40px;
     display: table-cell;
 }
 
 .jydaDe-head {
+    height: 30px;
+    line-height: 30px;
     width: 100%;
 }
 
