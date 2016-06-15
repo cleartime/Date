@@ -4,8 +4,14 @@
     display: table;
     border-collapse: separate;
 }
+.week-row{
+    background: rgb(242,246,249);
+}
 
 .week-row, .day-row {
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
     display: table-row;
 }
 
@@ -32,9 +38,11 @@
     text-align: center;
     margin: 0 auto;
 }
-.day-row div{
+.day-row div p{
+    margin: 0 auto;
     width: 30px;
     height: 30px;
+    line-height: 30px;
     position: relative;
     box-sizing: border-box;
 }
@@ -42,11 +50,13 @@
 .day-row div.jydaDe-disabled{
     color: #ccc;
 }
-.day-row > div input, .day-row > div label {
+.day-row > div p input, .day-row > div p label {
     width: 100%;
     height: 100%;
     position: absolute;
     z-index: 1;
+    top:0;
+    left: 0;
 }
 
 .day-row > div label {
@@ -56,10 +66,12 @@
 .day-row > div input {
     opacity: 0;
     display: block;
-    z-index: 199;
+    z-index: 199!important;
 }
 
 /*高亮样式*/
 .day-row > div input:checked + label,.day-row > div label.label-action{
-    border: 1px solid red
+    border-radius: 50%;
+    color:#fff;
+    background: rgb(0,182,243);
 }

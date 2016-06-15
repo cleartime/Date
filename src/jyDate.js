@@ -357,8 +357,8 @@ jyDate.prototype._create = function () {
     for (var i = 0; i < len_row; i++) {
         ohtml += '<div class=\"day-row\">';
         for (var j = 0; j < 7; j++) {
-            var ohtml1 = '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" checked >' + '<label>' + num + '</label>' + '</div>';//设置高亮
-            var ohtml2 = '<div><input type=' + INPUTTYPE + '  value=' + num + ' name="input" >' + '<label>' + num + '</label>' + '</div>';//设置不高亮
+            var ohtml1 = '<div><p class="day-row-div"><input type=' + INPUTTYPE + '  value=' + num + ' name="input" checked >' + '<label>' + num + '</label>' + '</p></div>';//设置高亮
+            var ohtml2 = '<div><p class="day-row-div"><input type=' + INPUTTYPE + '  value=' + num + ' name="input" >' + '<label>' + num + '</label>' + '</p></div>';//设置不高亮
             var ohtml3 = '<div>&nbsp;</div>';//设置空值
             var ohtml4 = '<div class="jydaDe-disabled"><label>' + num + '</label>' + '</div>';//设置不可点击
             if (num > this.m_days()[MONTH_NOW - 1]) {
