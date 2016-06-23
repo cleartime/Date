@@ -23,7 +23,7 @@ function jyDate(ca) {
     this._day = _date.getDate();//日
     this._week = _date.getDay();//星期
     var self = this;
-    var odiv = document.getElementById('jyDate');
+    var odiv = document.querySelector(ca);
 
     function init(config) {
         YEAR_NOW = self._year;
