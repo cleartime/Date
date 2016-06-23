@@ -62,7 +62,7 @@ function jyDate(ca) {
             odiv.appendChild(self._create(self.getYear(0), self.getMonth(0)));
             change()
         }, false);
-        if(IS_SHOW_BTN){
+        if (IS_SHOW_BTN) {
             cancel.addEventListener(CLICKTYPE, function () {
                 console.log(clickArr);
             }, false)
@@ -74,8 +74,14 @@ function jyDate(ca) {
 
 
     function click() {
-        //var oinput = document.querySelectorAll('day-row-div input[checked]');
-        console.log(1);
+        var oinput = document.querySelectorAll('.day-row-div input');
+        for(var i = 0,len=oinput.length;i<len;i++){
+            oinput[i].addEventListener(CLICKTYPE, function () {
+                var clickDOM = YEAR_NOW + '-' + MONTH_NOW + '-' + this.value;
+                this.checked?clickArr.push(clickDOM):clickArr.unshift(clickDOM);
+            }, false)
+        }
+
     }
 
     return {
@@ -418,7 +424,7 @@ jyDate.prototype._create = function () {
                 else if (!!DATAINTERVAL) {
                     if (arrNum.hasOwnProperty(num)) {
                         ohtml += ohtml1;
-                        var clickDOM = YEAR_NOW+'-'+MONTH_NOW+'-'+num;
+                        var clickDOM = YEAR_NOW + '-' + MONTH_NOW + '-' + num;
                         clickArr.push(clickDOM);
                     } else {
                         ohtml += ohtml4;
@@ -428,7 +434,7 @@ jyDate.prototype._create = function () {
                     if (HASARGUMENT) {
                         if (arrNum.hasOwnProperty(num)) {
                             ohtml += ohtml1;
-                            var clickDOM = YEAR_NOW+'-'+MONTH_NOW+'-'+num;
+                            var clickDOM = YEAR_NOW + '-' + MONTH_NOW + '-' + num;
                             clickArr.push(clickDOM);
                         } else {
                             ohtml += ohtml2;
@@ -436,7 +442,7 @@ jyDate.prototype._create = function () {
                     } else {
                         if (IS_SHOW_DAY_NOW && num == DAY_NOW && len > 0) {
                             ohtml += ohtml1;
-                            var clickDOM = YEAR_NOW+'-'+MONTH_NOW+'-'+num;
+                            var clickDOM = YEAR_NOW + '-' + MONTH_NOW + '-' + num;
                             clickArr.push(clickDOM);
                         } else {
                             ohtml += ohtml2;
