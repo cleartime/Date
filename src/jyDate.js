@@ -15,6 +15,7 @@ var HASARGUMENT = false;//判断有没有传参
 var IS_SHOW_DAY_NOW = true;//默认当前日高亮
 var DATAINTERVAL = null;//设置时间间隔(多少天可以点击)
 var IS_SHOW_BTN = true;//显示不显示取消确定按钮
+var clickArr = [];//高亮日期的集合
 
 
 function jyDate(ca) {
@@ -24,7 +25,7 @@ function jyDate(ca) {
     this._day = _date.getDate();//日
     this._week = _date.getDay();//星期
     var self = this;
-    var odiv = document.querySelector(ca);
+    var odiv = document.querySelector(ca || '#jyDate');
 
     function init(config) {
         YEAR_NOW = self._year;
@@ -35,10 +36,12 @@ function jyDate(ca) {
             self._config(config);
             odiv.appendChild(self._create());
             change();
+            click()
             return
         }
         odiv.appendChild(self._create());
         change();
+        click();
     }
 
     function change() {
@@ -47,6 +50,8 @@ function jyDate(ca) {
         }
         var prev = document.querySelector('.jydaDe-prev');
         var next = document.querySelector('.jydaDe-next');
+        var cancel = document.querySelectorAll('.jydaDe-btn a')[0];
+        var ensure = document.querySelectorAll('.jydaDe-btn a')[1];
         next.addEventListener(CLICKTYPE, function () {
             odiv.innerHTML = '';
             odiv.appendChild(self._create(self.getYear(1), self.getMonth(1)));
@@ -56,12 +61,30 @@ function jyDate(ca) {
             odiv.innerHTML = '';
             odiv.appendChild(self._create(self.getYear(0), self.getMonth(0)));
             change()
-        }, false)
+        }, false);
+        if(IS_SHOW_BTN){
+            cancel.addEventListener(CLICKTYPE, function () {
+                console.log(clickArr);
+            }, false)
+            ensure.addEventListener(CLICKTYPE, function () {
+                console.log(clickArr);
+            }, false)
+        }
+    }
+
+
+    function click() {
+        //var oinput = document.querySelectorAll('day-row-div input[checked]');
+        console.log(1);
     }
 
     return {
         init: function (config) {
             init(config);
+            return this
+        },
+        click: function (ca) {
+            ca && ca()
         }
     };
 
@@ -332,7 +355,7 @@ jyDate.prototype._createBtn = function () {
     var fragment = document.createDocumentFragment();
     var odiv = document.createElement('div');
     odiv.setAttribute('class', 'jydaDe-btn');
-    odiv.innerHTML = '<div><a href="">取消</a><a href="">确定</a></div>';
+    odiv.innerHTML = '<div><a href="javascript:void(0)">取消</a><a href="javascript:void(0)">确定</a></div>';
     fragment.appendChild(odiv);
     return fragment;
 }
@@ -395,6 +418,8 @@ jyDate.prototype._create = function () {
                 else if (!!DATAINTERVAL) {
                     if (arrNum.hasOwnProperty(num)) {
                         ohtml += ohtml1;
+                        var clickDOM = YEAR_NOW+'-'+MONTH_NOW+'-'+num;
+                        clickArr.push(clickDOM);
                     } else {
                         ohtml += ohtml4;
                     }
@@ -403,12 +428,16 @@ jyDate.prototype._create = function () {
                     if (HASARGUMENT) {
                         if (arrNum.hasOwnProperty(num)) {
                             ohtml += ohtml1;
+                            var clickDOM = YEAR_NOW+'-'+MONTH_NOW+'-'+num;
+                            clickArr.push(clickDOM);
                         } else {
                             ohtml += ohtml2;
                         }
                     } else {
                         if (IS_SHOW_DAY_NOW && num == DAY_NOW && len > 0) {
                             ohtml += ohtml1;
+                            var clickDOM = YEAR_NOW+'-'+MONTH_NOW+'-'+num;
+                            clickArr.push(clickDOM);
                         } else {
                             ohtml += ohtml2;
                         }

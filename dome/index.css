@@ -4,8 +4,9 @@
     display: table;
     border-collapse: separate;
 }
-.week-row{
-    background: rgb(242,246,249);
+
+.week-row {
+    background: rgb(242, 246, 249);
 }
 
 .week-row, .day-row {
@@ -14,10 +15,41 @@
     text-align: center;
     display: table-row;
 }
+
 .week-row > div, .day-row > div {
     height: 40px;
     line-height: 40px;
     display: table-cell;
+}
+
+.jydaDe-btn {
+    overflow: hidden;
+}
+
+.jydaDe-btn a {
+    text-align: center;
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+}
+
+.jydaDe-btn a:nth-child(1) {
+    color: #ccc;
+    margin-left: 20%;
+    border:1px solid #ccc ;
+    float: left;
+}
+
+
+.jydaDe-btn a:nth-child(2) {
+    margin-right: 20%;
+    background: rgb(0, 182, 243);
+    color: #fff;
+    float: right;
+}
+.jydaDe-btn a:active{
+    background: #ccc;
+    color: #fff;
 }
 
 .jydaDe-head {
@@ -41,7 +73,8 @@
     text-align: center;
     margin: 0 auto;
 }
-.day-row div p{
+
+.day-row div p {
     margin: 0 auto;
     width: 30px;
     height: 30px;
@@ -49,16 +82,18 @@
     position: relative;
     box-sizing: border-box;
 }
+
 /*不能点击的样式*/
-.day-row div.jydaDe-disabled{
+.day-row div.jydaDe-disabled {
     color: #ccc;
 }
+
 .day-row > div p input, .day-row > div p label {
     width: 100%;
     height: 100%;
     position: absolute;
     z-index: 1;
-    top:0;
+    top: 0;
     left: 0;
 }
 
@@ -69,12 +104,12 @@
 .day-row > div input {
     opacity: 0;
     display: block;
-    z-index: 199!important;
+    z-index: 199 !important;
 }
 
 /*高亮样式*/
-.day-row > div input:checked + label,.day-row > div label.label-action{
+.day-row > div input:checked + label, .day-row > div label.label-action {
     border-radius: 50%;
-    color:#fff;
-    background: rgb(0,182,243);
+    color: #fff;
+    background: rgb(0, 182, 243);
 }
