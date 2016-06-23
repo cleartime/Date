@@ -88,7 +88,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        MONTH_NOW = self._month + 1;
 	        DAY_NOW = self._day;
 	        FRIST_DATE = DATAARR = (YEAR_NOW + '-' + MONTH_NOW + '-' + DAY_NOW).split();
-	        clickArr.push(YEAR_NOW + '-' + MONTH_NOW + '-' + DAY_NOW);
+	        clickArr = clickArr.concat(FRIST_DATE);
 	        if (config) {
 	            self._config(config);
 	            odiv.appendChild(self._create());
@@ -177,10 +177,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        YEAR_NOW = data.year[0];
 	        MONTH_NOW = data.month[0];
 	        DAY_NOW = data.day[0];
+
 	    }
 	    if (config.dataArr) {
 	        HASARGUMENT = true;
 	        DATAARR = config.dataArr;
+	        clickArr = clickArr.concat(DATAARR);
 	    }
 	    if (config.dataInterval) {
 	        HASARGUMENT = true;
@@ -215,14 +217,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    } else {
 	        var odataArr = {};
-	        if (data) {
+	        if (!!data) {
 	            odataArr = new Date().date_to_timestamp(FRIST_DATE)();
-	        } else{
-	            odataArr = this.setData(DATAARR)();
+	        } else {
+	            odataArr = this.setData(clickArr)();
 	        }
-	        var year_now = odataArr.year;
-	        var month_now = odataArr.month;
-	        var day_now = odataArr.day;
+	        a(odataArr);
+	        return day_now
+	    }
+	    ;
+	    function a(data){
+	        var year_now = data.year;
+	        var month_now = data.month;
+	        var day_now = data.day;
 	        year_now.forEach(function (t, i) {
 	            if (YEAR_NOW != t) {
 	                delete day_now[i];
@@ -235,9 +242,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return []
 	            }
 	        });
-	        return day_now
 	    }
-	    ;
 	};
 
 	/**
@@ -245,9 +250,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param data
 	 */
 	jyDate.prototype.setData = function (data) {
-	    //if (clickArr.length > 1) {
-	    //    data = data.concat(clickArr);
-	    //}
 	    var _dataArr_year = [], _dataArr_month = [], _dataArr_day = [];
 	    //var arr = ['-', ' ', ','];
 	    //for (var i = 0, len = arr.length; i < len; i++) {

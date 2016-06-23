@@ -32,6 +32,7 @@ function jyDate(ca) {
         MONTH_NOW = self._month + 1;
         DAY_NOW = self._day;
         FRIST_DATE = DATAARR = (YEAR_NOW + '-' + MONTH_NOW + '-' + DAY_NOW).split();
+        clickArr = clickArr.concat(FRIST_DATE);
         if (config) {
             self._config(config);
             odiv.appendChild(self._create());
@@ -120,12 +121,12 @@ jyDate.prototype._config = function (config) {
         YEAR_NOW = data.year[0];
         MONTH_NOW = data.month[0];
         DAY_NOW = data.day[0];
-        dataArr = dataArr.concat(FRIST_DATE);
+
     }
     if (config.dataArr) {
         HASARGUMENT = true;
         DATAARR = config.dataArr;
-        dataArr = dataArr.concat(DATAARR);
+        clickArr = clickArr.concat(DATAARR);
     }
     if (config.dataInterval) {
         HASARGUMENT = true;
@@ -160,14 +161,19 @@ jyDate.prototype.setDay = function (data) {
         }
     } else {
         var odataArr = {};
-        if (data) {
+        if (!!data) {
             odataArr = new Date().date_to_timestamp(FRIST_DATE)();
-        } else{
-            odataArr = this.setData(DATAARR)();
+        } else {
+            odataArr = this.setData(clickArr)();
         }
-        var year_now = odataArr.year;
-        var month_now = odataArr.month;
-        var day_now = odataArr.day;
+        a(odataArr);
+        return day_now
+    }
+    ;
+    function a(data){
+        var year_now = data.year;
+        var month_now = data.month;
+        var day_now = data.day;
         year_now.forEach(function (t, i) {
             if (YEAR_NOW != t) {
                 delete day_now[i];
@@ -180,9 +186,7 @@ jyDate.prototype.setDay = function (data) {
                 return []
             }
         });
-        return day_now
     }
-    ;
 };
 
 /**
@@ -190,11 +194,6 @@ jyDate.prototype.setDay = function (data) {
  * @param data
  */
 jyDate.prototype.setData = function (data) {
-    console.log(data)
-    console.log(dataArr)
-    //if (clickArr.length > 1) {
-    //    data = data.concat(clickArr);
-    //}
     var _dataArr_year = [], _dataArr_month = [], _dataArr_day = [];
     //var arr = ['-', ' ', ','];
     //for (var i = 0, len = arr.length; i < len; i++) {
