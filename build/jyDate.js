@@ -222,27 +222,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	            odataArr = this.setData(clickArr)();
 	        }
-	        a(odataArr);
-	        return day_now
-	    }
-	    ;
-	    function a(data){
-	        var year_now = data.year;
-	        var month_now = data.month;
-	        var day_now = data.day;
-	        year_now.forEach(function (t, i) {
-	            if (YEAR_NOW != t) {
-	                delete day_now[i];
-	                return []
-	            }
-	        });
-	        month_now.forEach(function (t, i) {
-	            if (MONTH_NOW != t) {
-	                delete day_now[i];
-	                return []
-	            }
-	        });
-	    }
+	            var year_now = odataArr.year;
+	            var month_now = odataArr.month;
+	            var day_now = odataArr.day;
+	            year_now.forEach(function (t, i) {
+	                if (YEAR_NOW != t) {
+	                    delete day_now[i];
+	                    return []
+	                }
+	            });
+	            month_now.forEach(function (t, i) {
+	                if (MONTH_NOW != t) {
+	                    delete day_now[i];
+	                    return []
+	                }
+	            });
+	            return day_now
+	    };
+
 	};
 
 	/**
