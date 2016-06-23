@@ -70,6 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var HASARGUMENT = false;//判断有没有传参
 	var IS_SHOW_DAY_NOW = true;//默认当前日高亮
 	var DATAINTERVAL = null;//设置时间间隔(多少天可以点击)
+	var IS_SHOW_BTN = true;//显示不显示取消确定按钮
 
 
 	function jyDate(ca) {
@@ -159,6 +160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    IS_SHOW_DAY_NOW = config.isActiveToday === false ? false : true;
 	    CLICKTYPE = config.clickType || 'click';
 	    INPUTTYPE = config.inputType || 'checkbox';
+	    IS_SHOW_BTN = config.isShowBtn === false ? true : false;
 	};
 
 	/**
@@ -377,6 +379,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	};
 
+	/**
+	 * 创建取消按钮和点击按钮
+	 * @returns {DocumentFragment}
+	 * @private
+	 */
+	jyDate.prototype._createBtn = function () {
+	    var fragment = document.createDocumentFragment();
+	    var odiv = document.createElement('div');
+	    odiv.setAttribute('class', 'jydaDe-btn');
+	    odiv.innerHTML = '<div><a href="">取消</a><a href="">确定</a></div>>';
+	    fragment.appendChild(odiv);
+	    return fragment;
+	}
 
 	/**
 	 * 创建标题文档
@@ -463,6 +478,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    odiv.innerHTML = ohtml;
 	    fragment.appendChild(this._createTitle());
 	    fragment.appendChild(odiv);
+	    IS_SHOW_BTN ? fragment.appendChild(this._createBtn()) : '';
 	    return fragment;
 	};
 

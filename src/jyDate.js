@@ -14,7 +14,7 @@ var ISACTOIN = false;//是否显示日期高亮
 var HASARGUMENT = false;//判断有没有传参
 var IS_SHOW_DAY_NOW = true;//默认当前日高亮
 var DATAINTERVAL = null;//设置时间间隔(多少天可以点击)
-var IS_SHOW_BTN = null;//显示不显示取消确定按钮
+var IS_SHOW_BTN = true;//显示不显示取消确定按钮
 
 
 function jyDate(ca) {
@@ -104,6 +104,7 @@ jyDate.prototype._config = function (config) {
     IS_SHOW_DAY_NOW = config.isActiveToday === false ? false : true;
     CLICKTYPE = config.clickType || 'click';
     INPUTTYPE = config.inputType || 'checkbox';
+    IS_SHOW_BTN = config.isShowBtn === false ? true : false;
 };
 
 /**
@@ -329,10 +330,10 @@ jyDate.prototype._comparArr = function (arry1, arry2) {
  */
 jyDate.prototype._createBtn = function () {
     var fragment = document.createDocumentFragment();
-    var otitle = document.createElement('div');
-    otitle.setAttribute('class', 'jydaDe-btn');
-    otitle.innerHTML = '<a href="">取消</a><a href="">确定</a>';
-    fragment.appendChild(otitle);
+    var odiv = document.createElement('div');
+    odiv.setAttribute('class', 'jydaDe-btn');
+    odiv.innerHTML = '<div><a href="">取消</a><a href="">确定</a></div>';
+    fragment.appendChild(odiv);
     return fragment;
 }
 
@@ -421,7 +422,7 @@ jyDate.prototype._create = function () {
     odiv.innerHTML = ohtml;
     fragment.appendChild(this._createTitle());
     fragment.appendChild(odiv);
-
+    IS_SHOW_BTN ? fragment.appendChild(this._createBtn()) : '';
     return fragment;
 };
 
