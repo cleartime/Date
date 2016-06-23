@@ -14,6 +14,7 @@ var ISACTOIN = false;//是否显示日期高亮
 var HASARGUMENT = false;//判断有没有传参
 var IS_SHOW_DAY_NOW = true;//默认当前日高亮
 var DATAINTERVAL = null;//设置时间间隔(多少天可以点击)
+var IS_SHOW_BTN = null;//显示不显示取消确定按钮
 
 
 function jyDate(ca) {
@@ -321,6 +322,19 @@ jyDate.prototype._comparArr = function (arry1, arry2) {
 
 };
 
+/**
+ * 创建取消按钮和点击按钮
+ * @returns {DocumentFragment}
+ * @private
+ */
+jyDate.prototype._createBtn = function () {
+    var fragment = document.createDocumentFragment();
+    var otitle = document.createElement('div');
+    otitle.setAttribute('class', 'jydaDe-btn');
+    otitle.innerHTML = '<a href="">取消</a><a href="">确定</a>';
+    fragment.appendChild(otitle);
+    return fragment;
+}
 
 /**
  * 创建标题文档
@@ -407,6 +421,7 @@ jyDate.prototype._create = function () {
     odiv.innerHTML = ohtml;
     fragment.appendChild(this._createTitle());
     fragment.appendChild(odiv);
+
     return fragment;
 };
 
