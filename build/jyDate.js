@@ -213,7 +213,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var frist_year = FRIST_DATE[0].split('-')[0];
 	    var frist_month = FRIST_DATE[0].split('-')[1];
 	    var frist_day = FRIST_DATE[0].split('-')[2];
-	    if (!IsClickArr) {
+	    if (!HASARGUMENT ) {
 	        if (frist_year != YEAR_NOW) {
 	            return []
 	        }
@@ -465,7 +465,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var odiv = document.createElement('div');
 	    var ohtml = '';
 	    var arr = !!DATAINTERVAL ? this.setDay(1) : this.setDay();
-	    console.log(arr);
 	    var isDisabled = 'disabled';
 	    odiv.setAttribute('class', 'jydaDe');
 	    ohtml += '<div class=\"week-row\"><div>周日</div><div>周一</div><div>周二</div><div>周三</div><div>周四</div><div>周五</div><div>周六</div></div>';
@@ -494,13 +493,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	                else if (!!DATAINTERVAL) {
 	                    if (arrNum.hasOwnProperty(num)) {
-	                        ohtml += ohtml1;
+	                        ohtml += ohtml2;
 	                    } else {
 	                        ohtml += ohtml4;
 	                    }
 	                }
 	                else {
-	                    if (HASARGUMENT || IsClickArr) {
+	                    if (HASARGUMENT) {
 	                        if (arrNum.hasOwnProperty(num)) {
 	                            ohtml += ohtml1;
 	                        } else {
