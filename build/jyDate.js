@@ -72,6 +72,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var DATAINTERVAL = null;//设置时间间隔(多少天可以点击)
 	var IS_SHOW_BTN = true;//显示不显示取消确定按钮
 	var clickArr = [];//高亮日期的集合
+	var IsClickArr = false// 判断有没有点击
 
 
 	function jyDate(ca) {
@@ -133,10 +134,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var oinput = document.querySelectorAll('.day-row-div input');
 	        for (var i = 0, len = oinput.length; i < len; i++) {
 	            oinput[i].addEventListener(CLICKTYPE, function () {
+	                //if(clickArr.length==1){
+	                //    var data = clickArr[0].split('-');
+	                //    if (data[0] == YEAR_NOW && data[1] == MONTH_NOW && data[2] == DAY_NOW) {
+	                //        return false;
+	                //    }
+	                //}
 	                var clickDOM = YEAR_NOW + '-' + MONTH_NOW + '-' + this.value;
 	                var num = clickArr.indexOf(clickDOM);
 	                var indexOf = num == -1 ? true : false;
 	                this.checked && indexOf ? clickArr.push(clickDOM) : clickArr.splice(num, 1);
+	                IsClickArr = true;
 	            }, false)
 	        }
 
@@ -205,7 +213,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var frist_year = FRIST_DATE[0].split('-')[0];
 	    var frist_month = FRIST_DATE[0].split('-')[1];
 	    var frist_day = FRIST_DATE[0].split('-')[2];
-	    if (!HASARGUMENT) {
+	    if (!IsClickArr) {
 	        if (frist_year != YEAR_NOW) {
 	            return []
 	        }
@@ -222,23 +230,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	            odataArr = this.setData(clickArr)();
 	        }
-	            var year_now = odataArr.year;
-	            var month_now = odataArr.month;
-	            var day_now = odataArr.day;
-	            year_now.forEach(function (t, i) {
-	                if (YEAR_NOW != t) {
-	                    delete day_now[i];
-	                    return []
-	                }
-	            });
-	            month_now.forEach(function (t, i) {
-	                if (MONTH_NOW != t) {
-	                    delete day_now[i];
-	                    return []
-	                }
-	            });
-	            return day_now
-	    };
+	        var year_now = odataArr.year;
+	        var month_now = odataArr.month;
+	        var day_now = odataArr.day;
+	        year_now.forEach(function (t, i) {
+	            if (YEAR_NOW != t) {
+	                delete day_now[i];
+	                return []
+	            }
+	        });
+	        month_now.forEach(function (t, i) {
+	            if (MONTH_NOW != t) {
+	                delete day_now[i];
+	                return []
+	            }
+	        });
+	        return day_now
+	    }
+	    ;
 
 	};
 
@@ -456,6 +465,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var odiv = document.createElement('div');
 	    var ohtml = '';
 	    var arr = !!DATAINTERVAL ? this.setDay(1) : this.setDay();
+	    console.log(arr);
 	    var isDisabled = 'disabled';
 	    odiv.setAttribute('class', 'jydaDe');
 	    ohtml += '<div class=\"week-row\"><div>周日</div><div>周一</div><div>周二</div><div>周三</div><div>周四</div><div>周五</div><div>周六</div></div>';
@@ -490,7 +500,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                }
 	                else {
-	                    if (HASARGUMENT) {
+	                    if (HASARGUMENT || IsClickArr) {
 	                        if (arrNum.hasOwnProperty(num)) {
 	                            ohtml += ohtml1;
 	                        } else {
