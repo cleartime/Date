@@ -32,22 +32,22 @@ function jyDate(ca) {
         MONTH_NOW = self._month + 1;
         DAY_NOW = self._day;
         FRIST_DATE = DATAARR = (YEAR_NOW + '-' + MONTH_NOW + '-' + DAY_NOW).split();
+        clickArr.push(YEAR_NOW + '-' + MONTH_NOW + '-' + DAY_NOW);
         if (config) {
             self._config(config);
             odiv.appendChild(self._create());
             change();
-            click()
             return
         }
         odiv.appendChild(self._create());
         change();
-        click();
     }
 
     function change() {
         if (!ISCLICK) {
             return false
         }
+        click();
         var prev = document.querySelector('.jydaDe-prev');
         var next = document.querySelector('.jydaDe-next');
         var cancel = document.querySelectorAll('.jydaDe-btn a')[0];
@@ -75,10 +75,12 @@ function jyDate(ca) {
 
     function click() {
         var oinput = document.querySelectorAll('.day-row-div input');
-        for(var i = 0,len=oinput.length;i<len;i++){
+        for (var i = 0, len = oinput.length; i < len; i++) {
             oinput[i].addEventListener(CLICKTYPE, function () {
                 var clickDOM = YEAR_NOW + '-' + MONTH_NOW + '-' + this.value;
-                this.checked?clickArr.push(clickDOM):clickArr.unshift(clickDOM);
+                var num = clickArr.indexOf(clickDOM);
+                var indexOf = num == -1 ? true : false;
+                this.checked && indexOf ? clickArr.push(clickDOM) : clickArr.splice(num, 1);
             }, false)
         }
 
@@ -156,15 +158,16 @@ jyDate.prototype.setDay = function (data) {
             return [DAY_NOW]
         }
     } else {
-        var dataArr = {};
+        var odataArr = {};
         if (data) {
-            dataArr = new Date().date_to_timestamp(FRIST_DATE)();
-        } else {
-            dataArr = this.setData(DATAARR)();
+            odataArr = new Date().date_to_timestamp(FRIST_DATE)();
+        } else{
+            odataArr = this.setData(DATAARR)();
+            console.log(odataArr);
         }
-        var year_now = dataArr.year;
-        var month_now = dataArr.month;
-        var day_now = dataArr.day;
+        var year_now = odataArr.year;
+        var month_now = odataArr.month;
+        var day_now = odataArr.day;
         year_now.forEach(function (t, i) {
             if (YEAR_NOW != t) {
                 delete day_now[i];
@@ -187,6 +190,9 @@ jyDate.prototype.setDay = function (data) {
  * @param data
  */
 jyDate.prototype.setData = function (data) {
+    //if (clickArr.length > 1) {
+    //    data = data.concat(clickArr);
+    //}
     var _dataArr_year = [], _dataArr_month = [], _dataArr_day = [];
     //var arr = ['-', ' ', ','];
     //for (var i = 0, len = arr.length; i < len; i++) {
@@ -261,6 +267,7 @@ jyDate.prototype.getMonth = function (type) {
 
 jyDate.prototype.is_click = function () {
 };
+
 
 /**
  * 获取时间戳
@@ -424,8 +431,6 @@ jyDate.prototype._create = function () {
                 else if (!!DATAINTERVAL) {
                     if (arrNum.hasOwnProperty(num)) {
                         ohtml += ohtml1;
-                        var clickDOM = YEAR_NOW + '-' + MONTH_NOW + '-' + num;
-                        clickArr.push(clickDOM);
                     } else {
                         ohtml += ohtml4;
                     }
@@ -434,16 +439,12 @@ jyDate.prototype._create = function () {
                     if (HASARGUMENT) {
                         if (arrNum.hasOwnProperty(num)) {
                             ohtml += ohtml1;
-                            var clickDOM = YEAR_NOW + '-' + MONTH_NOW + '-' + num;
-                            clickArr.push(clickDOM);
                         } else {
                             ohtml += ohtml2;
                         }
                     } else {
                         if (IS_SHOW_DAY_NOW && num == DAY_NOW && len > 0) {
                             ohtml += ohtml1;
-                            var clickDOM = YEAR_NOW + '-' + MONTH_NOW + '-' + num;
-                            clickArr.push(clickDOM);
                         } else {
                             ohtml += ohtml2;
                         }

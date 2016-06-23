@@ -14,7 +14,9 @@
 <script>
     /*--属性dataInterval和属性dataArr不可同时设置,其余的都可以同时设置--*/
         //    什么都不传初始化日期,当前日高亮
-        jyDate().init();
+//        jyDate().init({
+//            data: '2016-5-4'
+//        });
 
 
 //    jyDate('.jyDate').init().click();
@@ -56,9 +58,9 @@
     //    });
     //
     //    //属性dataArr(格式为yyyy-mm-dd的数组),入参日期高亮
-//        jyDate().init({
-    //            dataArr: ['2016-5-23', '2016-6-3', '2017-4-2']
-    //        });
+        jyDate().init({
+                dataArr: ['2016-5-23', '2016-6-3', '2017-4-2']
+            });
     //
     //
     //    //属性dataInterval(传人天数即可)(注:属性dataInterval和属性dataArr不可同时设置)
