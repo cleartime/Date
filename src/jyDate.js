@@ -32,7 +32,6 @@ function jyDate(ca) {
         MONTH_NOW = self._month + 1;
         DAY_NOW = self._day;
         FRIST_DATE = DATAARR = (YEAR_NOW + '-' + MONTH_NOW + '-' + DAY_NOW).split();
-        clickArr.push(YEAR_NOW + '-' + MONTH_NOW + '-' + DAY_NOW);
         if (config) {
             self._config(config);
             odiv.appendChild(self._create());
@@ -121,10 +120,12 @@ jyDate.prototype._config = function (config) {
         YEAR_NOW = data.year[0];
         MONTH_NOW = data.month[0];
         DAY_NOW = data.day[0];
+        dataArr = dataArr.concat(FRIST_DATE);
     }
     if (config.dataArr) {
         HASARGUMENT = true;
         DATAARR = config.dataArr;
+        dataArr = dataArr.concat(DATAARR);
     }
     if (config.dataInterval) {
         HASARGUMENT = true;
@@ -133,9 +134,9 @@ jyDate.prototype._config = function (config) {
     ISCLICK = config.isChangMonth === false ? false : true;
     ISCLICKDAY = config.isClickDay === false ? false : true;
     IS_SHOW_DAY_NOW = config.isActiveToday === false ? false : true;
+    IS_SHOW_BTN = config.isShowBtn === false ? false : true;
     CLICKTYPE = config.clickType || 'click';
     INPUTTYPE = config.inputType || 'checkbox';
-    IS_SHOW_BTN = config.isShowBtn === false ? true : false;
 };
 
 /**
@@ -163,7 +164,6 @@ jyDate.prototype.setDay = function (data) {
             odataArr = new Date().date_to_timestamp(FRIST_DATE)();
         } else{
             odataArr = this.setData(DATAARR)();
-            console.log(odataArr);
         }
         var year_now = odataArr.year;
         var month_now = odataArr.month;
@@ -190,6 +190,8 @@ jyDate.prototype.setDay = function (data) {
  * @param data
  */
 jyDate.prototype.setData = function (data) {
+    console.log(data)
+    console.log(dataArr)
     //if (clickArr.length > 1) {
     //    data = data.concat(clickArr);
     //}

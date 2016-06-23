@@ -189,9 +189,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    ISCLICK = config.isChangMonth === false ? false : true;
 	    ISCLICKDAY = config.isClickDay === false ? false : true;
 	    IS_SHOW_DAY_NOW = config.isActiveToday === false ? false : true;
+	    IS_SHOW_BTN = config.isShowBtn === false ? false : true;
 	    CLICKTYPE = config.clickType || 'click';
 	    INPUTTYPE = config.inputType || 'checkbox';
-	    IS_SHOW_BTN = config.isShowBtn === false ? true : false;
 	};
 
 	/**
@@ -219,7 +219,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            odataArr = new Date().date_to_timestamp(FRIST_DATE)();
 	        } else{
 	            odataArr = this.setData(DATAARR)();
-	            console.log(odataArr);
 	        }
 	        var year_now = odataArr.year;
 	        var month_now = odataArr.month;
