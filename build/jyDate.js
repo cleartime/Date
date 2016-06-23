@@ -156,7 +156,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return this
 	        },
 	        click: function (ca) {
-	            ca && ca()
+	             ca && ca()
 	        }
 	    };
 

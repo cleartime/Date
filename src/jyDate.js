@@ -100,7 +100,7 @@ function jyDate(ca) {
             return this
         },
         click: function (ca) {
-            ca && ca()
+             ca && ca()
         }
     };
 
