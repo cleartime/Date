@@ -122,7 +122,6 @@ function next(callback) {
  */
 
 jyDate.prototype._config = function (config) {
-
     if (config.data) {
         FRIST_DATE = DATAARR = config.data.split();
         var data = this.setData(FRIST_DATE)();
@@ -131,24 +130,23 @@ jyDate.prototype._config = function (config) {
         DAY_NOW = data.day[0];
         clickArr.push(config.data);
     }
-
+    if (config.isActiveToday === false) {
+        IS_SHOW_DAY_NOW = false;
+        clickArr = [];
+    } else {
+        IS_SHOW_DAY_NOW = true;
+    }
     if (config.dataArr) {
-        if(!config.data){
+        if (config.data && IS_SHOW_DAY_NOW == true) {
+            clickArr = [];
             clickArr.push(YEAR_NOW + '-' + MONTH_NOW + '-' + DAY_NOW);
         }
         HASARGUMENT = true;
         DATAARR = config.dataArr;
         clickArr = clickArr.concat(DATAARR);
     }
-    if (config.isActiveToday === false) {
-        IS_SHOW_DAY_NOW = false;
-        if (config.data) {
-            clickArr = [];
-        }
-    } else {
-        IS_SHOW_DAY_NOW = true;
-    }
     if (config.dataInterval) {
+        clickArr = [];
         HASARGUMENT = true;
         DATAINTERVAL = config.dataInterval;
     }
