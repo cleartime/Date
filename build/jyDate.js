@@ -178,33 +178,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	jyDate.prototype._config = function (config) {
-	    clickArr = [];
+
 	    if (config.data) {
 	        FRIST_DATE = DATAARR = config.data.split();
 	        var data = this.setData(FRIST_DATE)();
 	        YEAR_NOW = data.year[0];
 	        MONTH_NOW = data.month[0];
 	        DAY_NOW = data.day[0];
+	        clickArr.push(config.data);
 	    }
+
 	    if (config.dataArr) {
+	        if(!config.data){
+	            clickArr.push(YEAR_NOW + '-' + MONTH_NOW + '-' + DAY_NOW);
+	        }
 	        HASARGUMENT = true;
 	        DATAARR = config.dataArr;
+	        clickArr = clickArr.concat(DATAARR);
+	    }
+	    if (config.isActiveToday === false) {
+	        IS_SHOW_DAY_NOW = false;
+	        if (config.data) {
+	            clickArr = [];
+	        }
+	    } else {
+	        IS_SHOW_DAY_NOW = true;
 	    }
 	    if (config.dataInterval) {
 	        HASARGUMENT = true;
 	        DATAINTERVAL = config.dataInterval;
 	    }
-	    if (config.isActiveToday === false) {
-	        IS_SHOW_DAY_NOW = false;
-	    } else {
-	        IS_SHOW_DAY_NOW = true;
-	        if (config.data) {
-	             clickArr.push(config.data);
-	        }
-	        if (config.dataArr) {
-	            clickArr = clickArr.concat(DATAARR);
-	        }
-	    }
+
 
 	    ISCLICK = config.isChangMonth === false ? false : true;
 	    ISCLICKDAY = config.isClickDay === false ? false : true;
