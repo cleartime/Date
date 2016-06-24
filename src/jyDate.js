@@ -64,7 +64,7 @@ function jyDate(ca) {
         }, false);
         if (IS_SHOW_BTN) {
             cancel.addEventListener(CLICKTYPE, function () {
-                console.log(clickArr);
+                odiv.style.display = 'none';
             }, false)
             ensure.addEventListener(CLICKTYPE, function () {
                 console.log(clickArr);
