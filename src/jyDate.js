@@ -128,6 +128,7 @@ jyDate.prototype._config = function (config) {
         YEAR_NOW = data.year[0];
         MONTH_NOW = data.month[0];
         DAY_NOW = data.day[0];
+        clickArr = [];
         clickArr.push(config.data);
     }
     if (config.isActiveToday === false) {
