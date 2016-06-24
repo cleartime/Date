@@ -91,7 +91,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        clickArr = clickArr.concat(FRIST_DATE);
 	        if (config) {
 	            self._config(config);
-	            clickArr = !IS_SHOW_DAY_NOW ? [] : clickArr.concat(FRIST_DATE);
 	            odiv.appendChild(self._create());
 	            change();
 	            return
@@ -185,20 +184,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	        YEAR_NOW = data.year[0];
 	        MONTH_NOW = data.month[0];
 	        DAY_NOW = data.day[0];
-
 	    }
 	    if (config.dataArr) {
 	        HASARGUMENT = true;
 	        DATAARR = config.dataArr;
-	        clickArr = clickArr.concat(DATAARR);
 	    }
 	    if (config.dataInterval) {
 	        HASARGUMENT = true;
 	        DATAINTERVAL = config.dataInterval;
 	    }
+	    if (config.isActiveToday === false) {
+	        IS_SHOW_DAY_NOW = false;
+	        clickArr = [];
+	        if (config.data) {
+	            clickArr = !IS_SHOW_DAY_NOW ? [] : clickArr.push(config.data);
+	        }
+	        if (config.dataArr) {
+	            clickArr = !IS_SHOW_DAY_NOW ? [] : clickArr.concat(DATAARR);
+	        }
+	    }
+
 	    ISCLICK = config.isChangMonth === false ? false : true;
 	    ISCLICKDAY = config.isClickDay === false ? false : true;
-	    IS_SHOW_DAY_NOW = config.isActiveToday === false ? false : true;
 	    IS_SHOW_BTN = config.isShowBtn === false ? false : true;
 	    CLICKTYPE = config.clickType || 'click';
 	    INPUTTYPE = config.inputType || 'checkbox';
