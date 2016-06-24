@@ -35,6 +35,7 @@ function jyDate(ca) {
         clickArr = clickArr.concat(FRIST_DATE);
         if (config) {
             self._config(config);
+            clickArr = !IS_SHOW_DAY_NOW ? [] : clickArr.concat(FRIST_DATE);
             odiv.appendChild(self._create());
             change();
             return
@@ -156,7 +157,7 @@ jyDate.prototype.setDay = function (data) {
     var frist_year = FRIST_DATE[0].split('-')[0];
     var frist_month = FRIST_DATE[0].split('-')[1];
     var frist_day = FRIST_DATE[0].split('-')[2];
-     if(!HASARGUMENT) {
+    if (!HASARGUMENT) {
         if (frist_year != YEAR_NOW) {
             return []
         }
@@ -436,7 +437,19 @@ jyDate.prototype._create = function () {
                 }
                 else if (!!DATAINTERVAL) {
                     if (arrNum.hasOwnProperty(num)) {
-                        ohtml += ohtml2;
+                        var arr2 = this.setDay();
+                        var arrNum2 = {};
+                        var len2 = arr2.length;
+                        if (len2 > 0) {
+                            for (var k2 = 0; k2 < len2; k2++) {
+                                arrNum2[arr2[k2]] = '';
+                            }
+                        }
+                        if (arrNum2.hasOwnProperty(num)) {
+                            ohtml += ohtml1;
+                        } else {
+                            ohtml += ohtml2;
+                        }
                     } else {
                         ohtml += ohtml4;
                     }
@@ -466,7 +479,8 @@ jyDate.prototype._create = function () {
     fragment.appendChild(odiv);
     IS_SHOW_BTN ? fragment.appendChild(this._createBtn()) : '';
     return fragment;
-};
+}
+;
 
 
 module.exports = function (ca) {
