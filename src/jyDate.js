@@ -16,7 +16,6 @@ var IS_SHOW_DAY_NOW = true;//默认当前日高亮
 var DATAINTERVAL = null;//设置时间间隔(多少天可以点击)
 var IS_SHOW_BTN = true;//显示不显示取消确定按钮
 var clickArr = [];//高亮日期的集合
-var IsClickArr = false// 判断有没有点击
 
 
 function jyDate(ca) {
@@ -88,7 +87,7 @@ function jyDate(ca) {
                 var num = clickArr.indexOf(clickDOM);
                 var indexOf = num == -1 ? true : false;
                 this.checked && indexOf ? clickArr.push(clickDOM) : clickArr.splice(num, 1);
-                IsClickArr = true;
+                HASARGUMENT = true;
             }, false)
         }
 
@@ -100,7 +99,7 @@ function jyDate(ca) {
             return this
         },
         click: function (ca) {
-             ca && ca()
+            ca && ca()
         }
     };
 
@@ -157,7 +156,7 @@ jyDate.prototype.setDay = function (data) {
     var frist_year = FRIST_DATE[0].split('-')[0];
     var frist_month = FRIST_DATE[0].split('-')[1];
     var frist_day = FRIST_DATE[0].split('-')[2];
-    if (!HASARGUMENT ) {
+     if(!HASARGUMENT) {
         if (frist_year != YEAR_NOW) {
             return []
         }
