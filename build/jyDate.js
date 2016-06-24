@@ -178,6 +178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	jyDate.prototype._config = function (config) {
+	    clickArr = [];
 	    if (config.data) {
 	        FRIST_DATE = DATAARR = config.data.split();
 	        var data = this.setData(FRIST_DATE)();
@@ -195,12 +196,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    if (config.isActiveToday === false) {
 	        IS_SHOW_DAY_NOW = false;
-	        clickArr = [];
+	    } else {
+	        IS_SHOW_DAY_NOW = true;
 	        if (config.data) {
-	            clickArr = !IS_SHOW_DAY_NOW ? [] : clickArr.push(config.data);
+	             clickArr.push(config.data);
 	        }
 	        if (config.dataArr) {
-	            clickArr = !IS_SHOW_DAY_NOW ? [] : clickArr.concat(DATAARR);
+	            clickArr = clickArr.concat(DATAARR);
 	        }
 	    }
 

@@ -24,13 +24,14 @@
 
     //
     //    //属性data(格式为yyyy-mm-dd),入参日期高亮
-        jyDate().init({
-            data: '2016-5-4'
-        });
+//        jyDate().init({
+//            data: '2016-5-4'
+//        });
     //
     //
     //    //属性isActiveToday,当前日不高亮
 //        jyDate().init({
+//            data: '2016-5-4',
 //            isActiveToday: false
 //        });
     //
@@ -58,9 +59,11 @@
 //        });
     //
     //    //属性dataArr(格式为yyyy-mm-dd的数组),入参日期高亮
-//        jyDate().init({
-//                dataArr: ['2016-5-23', '2016-6-3', '2017-4-2']
-//            });
+        jyDate().init({
+            isActiveToday: false,
+            data:'2016-4-2',
+                dataArr: ['2016-5-23', '2016-6-3', '2017-4-2']
+            });
     //
     //
     //    //属性dataInterval(传人天数即可)(注:属性dataInterval和属性dataArr不可同时设置)
