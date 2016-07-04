@@ -1,3 +1,8 @@
+#jyDate{
+    width: 100%;
+    max-width: 414px;
+    margin: 0 auto;
+}
 .jydaDe {
     width: 100%;
     clear: left;
@@ -23,6 +28,7 @@
 }
 
 .jydaDe-btn {
+    width: 100%;
     overflow: hidden;
 }
 
